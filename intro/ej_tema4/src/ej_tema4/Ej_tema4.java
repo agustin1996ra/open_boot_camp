@@ -62,14 +62,19 @@ public class Ej_tema4 {
         switch(estacion){
             case "Verano":
                 System.out.println("Es verano");
+                break;
             case "Otoño":
                 System.out.println("Es otoño");
+                break;
             case "Invierno":
                 System.out.println("Es invierno");
+                break;
             case "Primavera":
                 System.out.println("Es Primavera");
+                break;
             default:
                 System.out.println("El valor de la variable no correponde con una estación.");
+                break;
         }
         
         
