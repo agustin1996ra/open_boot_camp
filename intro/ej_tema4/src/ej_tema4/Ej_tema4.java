@@ -31,6 +31,7 @@ public class Ej_tema4 {
 
     
     public static void main(String[] args) {
+        
         int numeroIf = -10;
         if (numeroIf > 0) {
             System.out.println("El numero es positivo");
@@ -39,6 +40,40 @@ public class Ej_tema4 {
         }else{
             System.out.println("El numero es igual a 0");
         }
+        
+        int numeroWhile = 0;
+        while (numeroWhile < 3) {            
+            System.out.println("numeroWhile = " + numeroWhile);
+            numeroWhile++;
+        }
+        
+        
+        do {            
+            System.out.println("numeroWhile = " + numeroWhile);
+            numeroWhile++;
+        } while (numeroWhile < 3);
+        
+        
+        for (int numeroFor = 0; numeroFor < 3; numeroFor++) {
+            System.out.println("numeroFor = " + numeroFor);
+        }
+        
+        String estacion = "Verano";
+        switch(estacion){
+            case "Verano":
+                System.out.println("Es verano");
+            case "Otoño":
+                System.out.println("Es otoño");
+            case "Invierno":
+                System.out.println("Es invierno");
+            case "Primavera":
+                System.out.println("Es Primavera");
+            default:
+                System.out.println("El valor de la variable no correponde con una estación.");
+        }
+        
+        
+        
     }
     
 }
