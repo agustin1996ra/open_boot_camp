@@ -14,6 +14,7 @@ class Alumno:
         self.nombre = nombre
         self.nota = nota
         print(f'El alumno {self.nombre} tiene una nota de {self.nota}')
+        print('Esta aprobado') if self.nota >= 7 else print('Esta desaprobado')
 
     def set_nombre(self, nombre):
         self.nombre = nombre
@@ -27,12 +28,19 @@ class Alumno:
     def get_nota(self):
         return self.nota
 
+    def isaporbado(self):
+        aprobado = False
+        if self.nota >= 7:
+            aprobado = True
+        return aprobado
+
 
 # Utilizando la función __init__, dando sus argumentos y el print inicial
-a1 = Alumno('Agustin', 8)
+a1 = Alumno('Agustin', 6)
 
 # Cambio las propiedades con los sets
 a1.set_nombre('Agustin Rodriguez')
 a1.set_nota(9)
 # Obtengo los valores con los gets
 print(f'El alumno {a1.get_nombre()} tiene la nota {a1.get_nota()}')
+print('Esta aprobado') if a1.isaporbado() else print('Esta desaprobado')
