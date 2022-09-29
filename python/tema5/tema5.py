@@ -148,7 +148,7 @@ def suma2(a=1, b=5, c=1):
     print(a + b + c)
 
 
-suma2(c=9)
+suma2(c=9, b=3)
 
 
 def suma3(*args):  # Parámetros variables

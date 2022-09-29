@@ -17,8 +17,8 @@ class Juguete:
     color = 'verde'  # no se puede modificar desde afuera
     # Definicion de metodos
 
-    def cambia_color(self):
-        self.color = 'azul'
+    def cambia_color(self, pintura):
+        self.color = pintura
 
     def enciende(self):
         self._encendido = True
@@ -132,7 +132,7 @@ nueva instancia generada.
 class SenioraPotato(Potato):
     nombre = None
 
-    def __init__(self, nombre):
+    def __init__(self, nombre='Juan'):
         super().__init__()
         self.nombre = nombre
         print('Estoy en el constructor', nombre)
