@@ -41,6 +41,5 @@ def main():
     print(autito.get_tipo())
 
 
-
 if __name__ == '__main__':
     main()
