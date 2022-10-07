@@ -21,6 +21,6 @@ def main():
     for linea in lineas:
         print(linea)
 
-        
+
 if __name__ == '__main__':
     main()
