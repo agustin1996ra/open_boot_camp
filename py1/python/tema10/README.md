@@ -9,7 +9,7 @@ Es una biblioteca que es un proyecto que se desprende TLC, este nós brinda una 
 para generar una interfaz gráfica, desde un script de python.
 
 ### Herramientas como:
-Tkinter Designer, es una herramienta donde se le pueden da<r platillas de fliker.
+Tkinter Designer, es una herramienta donde se le pueden da<r platillas de figma.
 
 ### instalar tkinter  
 
@@ -135,4 +135,9 @@ window.mainloop()
 - listbox (listas desplegables)
 - 
 
-
+## Paradigmas orintada a eventos
+Los eventos son, situaciones que van a alterar el aspecto visual de nuestra GUI, 
+estos son por ejemplo: cuando pasamos el mouse sobre un botón y este cambia de color, 
+o apretamos en laguna parte y se despliega una lista de opciones.
+Estos necesitan un callback. Esto es una función.
+python-course.eu
