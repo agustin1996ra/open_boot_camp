@@ -58,6 +58,22 @@ public class Tipos {
 		int number3 = 3;   // 4 byte
 		long number4 = 4;  // 8 byte
 		
+		// punto flotante
+		float decimal1 = 4.5f;
+		double decimal2 = 9.49d;
+
+		// tipo caracter
+		char caracter = 'a';
+
+		// tipo cadena 
+		String nombre = "Agustin";
+		String apellido = "Rodriguez";
+
+		// tipo booleano
+		boolean falso = false;
+		boolean verdadero = true;
+
+		// tipo envoltorio (esto no lo entendi muy bien)
 
 	}
 }
