@@ -811,3 +811,154 @@ Lo que nos permite eso no solo es, reducir la cantidad de repeticiones en las pl
 
 ## Enlace e inclusión
 
+En esta sección vamos a estar trabajando sobre el mismo proyecto que en la sección anterior. Lo primero que vamos a hacer es agregar un path para la ruta raíz.
+
+```python
+# urls.py
+from django.contrib import admin
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('herencia/', views.herencia, name='herencia'),
+    path('ejemplo/', views.ejemplo, name='ejemplo'),
+    path('otra/', views.otra, name='otra'),
+    path('', views.index, name='index')  # path para la ruta raíz
+]
+```
+
+Luego en las vistas vamos a definir la vista de `index`.
+
+```python
+# views.py
+from django.shortcuts import render
+
+def index(request):
+    return render(request, 'index.html', {})
+
+def herencia(request):
+    return render(request, 'herencia.html', {})
+
+def ejemplo(request):
+    return render(request, 'ejemplo.html', {})
+
+def otra(request):
+    return render(request, 'otra.html', {})
+```
+
+Ahora vamos a continuar viendo como se hacen las vinculaciones entre las distintas vistas/plantillas, ya que hasta ahora hemos venido trabajando con la barra de direcciones, y de esa manera nos hemos estado moviendo por nuestros proyectos.
+
+Para ello vamos a trabajar sobre el archivo `base.html`, que es el archivo que tiene el menu de enlaces. Y lo que haremos es darle la dirección a cada uno de los enlaces que tiene el menu de navegación.
+
+Y para darle esta dirección al enlace, utilizaremos el nombre que hemos estado poniéndole en la configuración de las urls, ya que esto presenta una ventaja, por que si en un momento tuviésemos la necesidad de cambiar las rutas de los urls, tendríamos que alterar también los enlaces referidos a ellas. Sin embargo al trabajar con los nombres no tendremos esos problemas.
+
+Al agregar los nombres de las direcciones, utilizaremos un comando de django, con las llaves y los símbolos de porcentaje, utilizando la palabra `url` y seguido por el nombre entre comillas de la dirección.
+
+```html
+<!-- base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    {% block styles %}{% endblock styles %}
+    <title>{% block title %}{% endblock title %}</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <!-- Aqui es donde agregaremos los nombres, de las
+             direcciones, utilizando un comando de django -->
+            <li><a href="{% url 'herencia' %}">Herencia</a></li>
+            <li><a href="{% url 'ejemplo' %}">Ejemplo</a></li>
+            <li><a href="{% url 'otra' %}">Otra</a></li>
+        </ul>
+    </nav>
+    <main>
+        {% block content %}{% endblock content %}
+    </main>
+    <footer>
+        <p>Todos los derechos reservados</p>
+    </footer>
+    {% block scripts %}{% endblock scripts %}
+</body>
+</html>
+```
+
+En el caso de nuestra plantilla base, hay posibilidades, de seguir atomizando aun mas el código, y hacerlo más legible y mejor optimizado, para ello vamos a hacer uso de los `includes`(inclusión).
+
+Para ello, vamos a crear una carpeta dentro de `templates/layouts` que se llame `partials`. Y dentro de ella vamos a crear un archivo html que se llame `menu`. Ahora en vez de tener el menu en la plantilla base, vamos a extraerlo y dejarlo en el archivo `menu.html` a toda la etiqueta `<nav>`.
+Y luego lo que haremos será agregar en el archivo `base.html`, y para ello, com estamos en el archivo base, lo que hacemos no es utilizar la herencia de plantilla, si no es la inclusión de contenido html. Que es otro concepto de django.
+
+```html
+<!-- menu.html -->
+<nav>
+    <ul>
+        <li><a href="{% url 'index' %}">Home</a></li>
+        <li><a href="{% url 'herencia' %}">Herencia</a></li>
+        <li><a href="{% url 'ejemplo' %}">Ejemplo</a></li>
+        <li><a href="{% url 'otra' %}">Otra</a></li>
+    </ul>
+</nav>
+```
+
+```html
+<!-- base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    {% block styles %}{% endblock styles %}
+    <title>{% block title %}{% endblock title %}</title>
+</head>
+<body>
+    {% include './partials/menu.html' %}
+    <main>
+        {% block content %}{% endblock content %}
+    </main>
+    <footer>
+        <p>Todos los derechos reservados</p>
+    </footer>
+    {% block scripts %}{% endblock scripts %}
+</body>
+</html>
+```
+
+De esta manera, podemos modularizar un poco mas nuestro plantillado.
+
+Por ejemplo, otro caso donde podríamos seguir modularizando es en el caso del footer, osea que dentro de la carpeta partials, podríamos agregar un archivo `footer.html`
+
+```html
+<!-- base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    {% block styles %}{% endblock styles %}
+    <title>{% block title %}{% endblock title %}</title>
+</head>
+<body>
+    {% include './partials/menu.html' %}
+    <main>
+        {% block content %}{% endblock content %}
+    </main>
+    {% include './partials/footer.html' %}
+    {% block scripts %}{% endblock scripts %}
+</body>
+</html>
+```
+
+Y de esta manera seguir atomizando un poco mas nuestro proyecto. Esto es importante en la medida de lo posible, ir atomizando, nuestro código para hacerlo mas manejable y mas fácil de leer. 
+
