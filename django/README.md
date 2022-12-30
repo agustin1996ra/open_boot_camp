@@ -41,7 +41,7 @@ Si django se ha ejecutado de forma correcta veremos en la carpeta que ejecutamos
 ## Patrón de arquitectura
 
 Django es un framework gratuito hecho en python
-Un framework es un conjunto de herramientas, librerías y estructura, que nos permite trabajar de forma ágil. A la hora de trabajar en el desarrollo web no es necesario estar inventando la rueda, si no que nos ayudamos de los frameworks para reutilizar herramientas, y desarrollar agilmente.
+Un framework es un conjunto de herramientas, librerías y estructura, que nos permite trabajar de forma ágil. A la hora de trabajar en el desarrollo web no es necesario estar inventando la rueda, si no que nos ayudamos de los frameworks para reutilizar herramientas, y desarrollar ágilmente.
 
 En el desarrollo web, hay partes que siempre se repiten, como los son:
 
@@ -51,16 +51,16 @@ Todas estas acciones son comunes en el desarrollo web.
 
 Ademas django nos facilitara una estructura de arquitectura de nuestra pagina.
 
-### Patron MVC
+### Patrón MVC
 
-![model view controler](img/mvc.jpg)
+![model view controller](img/mvc.jpg)
 En este modelo lo que tenemos es un usuario, que realiza una petición a una url, es decir esta en el navegador y escribe la dirección de una pagina web.
 Entonces lo que ocurre, es que se accede a un diccionario de urls, donde asocia cada una de estas urls a un controlador.
 El controlador, es el que sabe lo que tiene que realizar.
 
 Por ejemplo, si uno esta accediendo a un blog, el controlador asociado a esa url, tendrá las funciones esenciales, como pueden ser, consultar los últimos posts, recabar toda la información necesaria.
 El controlador llamara a los modelos. El modelo es una abstracción de los datos que tenemos en nuestra base de datos. Y el modelo puede ser tratado como una clase, pudiendo de esta manera abstraerse de la base de datos, que queda en un segundo plano, y utilizar las propiedades definidas de la clase modelo.
-El modelo al final, esta conectado a la base de datos y interactúa con ella, mediante un **ORM**(object relational maping).
+El modelo al final, esta conectado a la base de datos y interactúa con ella, mediante un **ORM**(object relational mapping).
 Nosotros manipulamos los objetos del modelo, y es el orm quien se encarga de leer, escribir y trabajar con la base de datos.
 En el ejemplo, nuestro modelo obtiene los datos  mediante el el orm de la base de datos, y el controlador puede ver los objetos obtenidos por el modelo, y de esa forma el controlador obtiene los datos.
 Una vez que el controlador obtiene los datos, lo que hace es pasar esos datos a la vista.
@@ -76,7 +76,7 @@ MTV (model template view)
 Los mcv son pensados en un principio para componentes más pequeños, y mtv para estructuraras de componentes o aplicaciones mas grandes. por eso django decidió renombrarlas para evitar la polémica.
 
 En esta funciona exactamente igual, solo que a los controladores los vamos a llamar vistas y a las vistas templates/plantillas.
-![model tamplate view](img/mtv.jpg)
+![model template view](img/mtv.jpg)
 
 ## Estructura de archivos
 
@@ -85,11 +85,11 @@ El archivo `manage.py` es muy importante, pero no es un archivo que nosotros val
 
 Es importante recordar que django nos permite gestionar nuestro proyecto de forma modular, por lo tanto podemos tener varias aplicaciones, cada aplicación se gestiona como un paquete.
 
-Ahora de manera de ejemplo vamos a entrar a nuestra aplicacion `holamundo`, en nuestro proyecto de prueba `holamundo`, dentro de ella podemos ver la estructura de archivos que nos ha generado django.
+Ahora de manera de ejemplo vamos a entrar a nuestra aplicación `holamundo`, en nuestro proyecto de prueba `holamundo`, dentro de ella podemos ver la estructura de archivos que nos ha generado django.
 ![estructura de archivos](img/app-holamundo.jpg)
 
 Cada una de las aplicaciones debe contener en su directorio un archivo `__init__.py`, para que podamos gestionar cada aplicación como un paquete.
-Tenemos  dentro de esta estructura dos archivos que nos van a ayudar con el servidor de pruebas y otro tipo de acciones de pruebas, que estaran `asgi.py` y `wsgi.py`.
+Tenemos  dentro de esta estructura dos archivos que nos van a ayudar con el servidor de pruebas y otro tipo de acciones de pruebas, que estarán `asgi.py` y `wsgi.py`.
 
 Luego tenemos los archivos que si vamos a estar manipulando `settings.py` y `urls.py`.
 
@@ -134,7 +134,7 @@ Este comando se utilizara cada vez que modifiquemos el modelo de la estructura d
 
 De manera de prueba, utilizaremos el motor SQLlite, y luego en un entorno de producción mudaremos a postgre.
 
-Debemos recodar que el archivo `manage.py`, es el que debemos llamar siempre que queramos realizar una accion en nuestro proyecto. Osea que la instrucción sera a través de ese archivo.
+Debemos recodar que el archivo `manage.py`, es el que debemos llamar siempre que queramos realizar una acción en nuestro proyecto. Osea que la instrucción sera a través de ese archivo.
 
 ```powershell
 PS C:\rep\open_boot_camp\django\prueba\holamundo>python manage.py migrate
@@ -223,7 +223,7 @@ Una vez realizados estos cambios en los archivos, podemos ejecutar nuestro live 
 ## Rutas con parámetros
 
 Las rutas con parámetros nos vana permitir, recepcionar variables a través de la url que vamos a poder utilizar en nuestra vista.
-Hasta el momento todas las rutas que hemos agregado al proyecto "Hola mundo", son rutas estáticas. No estan recibiendo ninguna información de la url.
+Hasta el momento todas las rutas que hemos agregado al proyecto "Hola mundo", son rutas estáticas. No están recibiendo ninguna información de la url.
 
 En django para poder recibir variables a través de la ruta, debemos agregarlas encerradas entre `<>`, e indicar el tipo de variable, dos puntos seguido de su nombre de variable.
 
@@ -237,7 +237,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('saludo/', views.saludo, name='saludo'),
     path('despedida/', views.despedida, name='despedida'),
-    paht('adulto/<int:edad>/', views.adulto, name='adulto')
+    path('adulto/<int:edad>/', views.adulto, name='adulto')
 ]
 
 ```
@@ -261,7 +261,7 @@ def adulto(request, edad):
 ```
 
 Para probar el funcionamiento de la ruta, debemos ejecutar el live server,
-y darle la ruta a nuestra vista seguido de el valor de nuestra variable. En este caso podria ser `ip/adulto/18`, y nos llevara a una pagina que tendrá el mensaje de "Eres mayor de edad".
+y darle la ruta a nuestra vista seguido de el valor de nuestra variable. En este caso podría ser `ip/adulto/18`, y nos llevara a una pagina que tendrá el mensaje de "Eres mayor de edad".
 
 Esto nos sera muy util a la hora de poder, a través de una ruta a una publicación, una noticia, un producto, construyendo la ruta del objeto que deseamos consultar. Para poder empezar a vincular el contenido de forma mas interactiva.
 
@@ -306,7 +306,7 @@ Luego en el archivo `views.py`, tenemos varias posibilidades con el siguiente pa
 
 El método `render()` va a necesitar de tres parámetros para funcionar, el primero sera la `request` para que sea consistente, en segundo lugar la dirección del archivo html que sera la plantilla, y un tercero que sera el contexto, en este caso, no tendremos nada, ya que la plantilla que armamos es estática, osea que no necesita de variables o parámetros. Pero en un futuro utilizaremos plantillas que necesitaran parámetros y información para mostrar al usuario lo datos de su consulta.
 
-Un contexto en django, no sera mas que un diccionario, que tendra llaves y valores.
+Un contexto en django, no sera mas que un diccionario, que tendrá llaves y valores.
 
 ```python
 # views.py
@@ -337,7 +337,7 @@ def simple(request):
 
 A lo largo de esta sección se vera como generar plantillas de contexto dinámico.
 
-En este caso a la hora de dar la direccion en el archivo `urls.py`, también debemos dales los valores contextuales, ya que nos estamos refiriendo a una consulta a una plantilla dinamica.
+En este caso a la hora de dar la dirección en el archivo `urls.py`, también debemos dales los valores contextuales, ya que nos estamos refiriendo a una consulta a una plantilla dinámica.
 
 ```python
 # urls.py
@@ -348,21 +348,21 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('simple/', views.simple, name='simple'),
-    path('dinamico/<str=name>', views.dinamico, name='dinamico')
+    path('dinámico/<str=name>', views.dinámico, name='dinámico')
 ]
 
 ```
 
-En el caso de la configuracion de la funcion que describe la vista en el archivo `view.py`, también debemos agregar en los parametros de la funcion, los valores que nos daran el comportamiento de la búsqueda que desplegara los datos sobre la plantilla.
+En el caso de la configuración de la función que describe la vista en el archivo `view.py`, también debemos agregar en los parámetros de la función, los valores que nos darán el comportamiento de la búsqueda que desplegara los datos sobre la plantilla.
 
 ```python
 # views.py
 
 from django.shortcuts import render
 
-def dinamico(request, name):
+def dinámico(request, name):
     context = {'name' : name}
-    return render(request, 'dinamico.html', context)
+    return render(request, 'dinámico.html', context)
 
 ```
 
@@ -383,7 +383,7 @@ Para utilizar el valor de contexto en la plantilla, debemos usar dobles llaves, 
 </html>
 ```
 
-![plantilla dinamica](img/plantilla_dinamica.jpg)
+![plantilla dinámica](img/plantilla_dinamica.jpg)
 
 En el contexto que le pasamos a la plantilla, no solo podemos pasarle nombres de llaves, sino también le podemos pasar objetos, y sus variables y métodos asociados.
 
@@ -421,14 +421,14 @@ Teniendo en cuenta, que categories es una lista que definimos en la vista.
 ```python
 from django.shortcuts import render
 
-def dinamico(request, name):
+def dinámico(request, name):
     categories = ['code', 'design', 'marketing']
     context = {'name': name, 'categories' : categories}
-    return render(request, 'dinamico.html', context)
+    return render(request, 'dinámico.html', context)
 
 ```
 
-El resultado de dicha configuracion es la siguiente:
+El resultado de dicha configuración es la siguiente:
 
 ![bucle en la plantilla](img/bucles%20y%20estruc.jpg)
 
@@ -505,7 +505,7 @@ Los comentarios html, son visibles cuando uno inspecciona la pagina desde el nav
 
 ### Filtros
 
-Supongamos que quiero con el ejemplo anterior, poner luego de la renderización de los objetos de la lista `categories`, el total de elementos. Esto podria realizarlo creando una nueva variable, en el archivo `views.py` donde se almacene el largo de la lista, o también lo puedo hacer utilizando un filtro en la plantilla.
+Supongamos que quiero con el ejemplo anterior, poner luego de la renderización de los objetos de la lista `categories`, el total de elementos. Esto podría realizarlo creando una nueva variable, en el archivo `views.py` donde se almacene el largo de la lista, o también lo puedo hacer utilizando un filtro en la plantilla.
 
 Para el uso de filtros se utiliza la siguiente sintaxis, dentro de las dobles llaves ponemos el nombre de variable, seguido por el símbolo pipe o tubería `|`, continuado por el nombre del filtro que le deseamos aplicar. En este caso `length`. Esta construcción sintáctica tomara una forma así`{{categories|length}}`
 
@@ -573,7 +573,7 @@ STATICFILES_DIRS = [
 ]
 ```
 
-En la plantilla debemos agregar esta configuracion:
+En la plantilla debemos agregar esta configuración:
 
 ```html
 {% load static %} <!-- esto debemos agregar -->
@@ -604,3 +604,210 @@ h1 {
 Podemos ver que el resultado de nuestra pagina tiene los estilos especificados en el archivo `css`.
 
 ![css estático](./img/archivo%20estatico%20css.jpg)
+
+## Herencia de plantillas
+
+En esta sección, vamos a trabajar con otro proyecto django llamado `herencia`.
+
+El concepto de herencia se aplica para, mejorar la estructura de nuestro proyecto y no caer en el error de repetir muchas veces la misma estructura de plantilla.
+
+Por ejemplo, en el siguiente caso tenemos tres views, que llaman a tres plantillas diferentes, y si miramos las plantillas son idénticas una a otra.
+
+```python
+# views.py
+from django.shortcuts import render
+
+def herencia(request):
+    return render(request, 'herencia.html', {})
+
+def ejemplo(request):
+    return render(request, 'ejemplo.html', {})
+
+def otra(request):
+    return render(request, 'otra.html', {})
+```
+
+```html
+<!-- herencia.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Herencia</h1>
+</body>
+</html>
+```
+
+```html
+<!-- ejemplo.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Ejemplo</h1>
+</body>
+</html>
+```
+
+```html
+<!-- otra.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Otra</h1>
+</body>
+</html>
+```
+
+Como podemos ver, estamos repitiendo la misma estructura, al realizar el plantillado.
+
+Ahora veremos como vamos a armar el plantillado para poder heredar, las partes de la plantilla que se repite en todas las paginas.
+Para eso vamos a utilizar un archivo llamado `base.html` en un sub directorio llamado `layouts` de la carpeta `templates`.
+
+En este archivo lo que haremos es dejar especificados diferentes bloques, que serán utilizados por las diferentes sub plantillas, por ejemplo, tendremos un bloque `content` en el main, este bloque lo utilizaran todas las paginas, por que sera donde se desplegara el contenido. Pero después hay paginas que pueden requerir, un estilo especial, entonces dejamos un bloque llamado `styles`, para que dichas paginas puedan hacer uso de él.
+
+El bloque `title`, también sera utilizado por todas, al igual que `content`. Y luego del body podemos dejar un bloque para que aquellas paginas que necesiten importar un archivo script, puedan hacerlo.
+
+Por asi decirlo, dejando estos, bloques dejamos los lugares donde es posible que nuestras sub plantillas se diferencien de la base.
+
+```html
+<!-- base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    {% block styles %}{% endblock styles %}
+    <title>{% block title %}{% endblock title %}</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#">Herencia</a></li>
+            <li><a href="#">Ejemplo</a></li>
+            <li><a href="#">Otra</a></li>
+        </ul>
+    </nav>
+    <main>
+        {% block content %}{% endblock content %}
+    </main>
+    <footer>
+        <p>Todos los derechos reservados</p>
+    </footer>
+    {% block scripts %}{% endblock scripts %}
+</body>
+</html>
+```
+
+También configuramos un archivo css, básico como para darle un estructura visual simple a las paginas.
+
+```css
+/* style.css */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+nav {
+    background-color: #666;
+}
+
+ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+ul li{
+    padding:  20px;
+}
+
+ul li a{
+    text-decoration: none;
+    font-size: 20px;
+    color: white;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    min-height: 75vh;
+}
+
+footer {
+    background-color: #666;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 50px;
+}
+```
+
+Luego, para indicar en las plantillas `herencia.html`, `ejemplo.html` y `otra.html`, heredan de la plantilla `base.html`, se utilizara un bloque de código django en las plantillas.
+
+```html
+<!-- herencia.html -->
+{% extends './layouts/base.html' %}
+
+```
+
+```html
+<!-- ejemplo.html -->
+{% extends './layouts/base.html' %}
+
+```
+
+```html
+<!-- otra.html -->
+{% extends './layouts/base.html' %}
+
+```
+
+De esta manera ya indicamos en las sub plantillas que extenderemos la plantilla base, tal cual como se extiende una clase.
+
+Pero nos falta, por si decirlo, implementar los bloques que han quedado vacíos en la plantilla base.
+
+Vamos a empezar con el la plantilla `herencia.html`
+
+```html
+<!-- herencia.html -->
+{% extends './layouts/base.html' %}
+
+{% block title %}Herencia{% endblock title %}
+
+{% block content %}
+    <h1>Herencia</h1>
+{% endblock content %}
+```
+
+Como se puede ver, los bloques `styles` y `scripts`, no los estoy usando, eso es por que implemento solo aquellos bloques que necesito para esta sub plantilla, el resto no son relevantes en este caso.
+
+Lo que nos permite eso no solo es, reducir la cantidad de repeticiones en las plantillas, si no que en el caso de necesitar agregar algo en nuestra pagina, solo deberemos agregarla a la plantilla base. Por ejemplo, si en esta quisiéramos agregar el nombre de la empresa en el menu de navegación, simple mente sería agregar una linea, a dicho archivo, sin tener que controlar cuestiones de consistencia estética entre las diferentes paginas de nuestro proyecto.
+
+## Enlace e inclusión
+
