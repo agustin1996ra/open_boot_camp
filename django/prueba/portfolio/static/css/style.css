@@ -1,3 +1,10 @@
+:root {
+    --color-primary: #ffcc00;
+    --color-secondary: #ffa300;
+    --color-text: #707789;
+    --color-bg: #dedede;
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -5,7 +12,12 @@
 }
 
 nav {
+    width: 120vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     background-color: rgb(64, 8, 116);
+    height: 75px;
 }
 
 ul {
@@ -15,11 +27,11 @@ ul {
     align-content: center;
 }
 
-ul li {
+nav ul li {
     padding: 20px;
 }
 
-ul li a {
+nav ul li a {
     text-decoration: none;
     font-size: 25px;
     color: antiquewhite;
@@ -28,7 +40,8 @@ ul li a {
 main {
     color: antiquewhite;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
     padding: 20px;
     min-height: 85vh;
@@ -43,4 +56,15 @@ footer {
     align-items: center;
     width: 100%;
     padding: 7px;
+}
+
+nav img {
+    margin: 25px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }

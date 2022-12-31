@@ -971,3 +971,6 @@ En esta sección, vamos a explorar la documentación de django, para entender co
 El objetivo de esta practica es muy sencillo, vamos a hacer una pagina con dos urls, en una sección inicial, que va ocupar el directorio raíz, vamos a tener una imagen nuestra con info, y en una segunda sección vamos listar un conjunto de imágenes que harán las veces de nuestro porfolio.
 
 
+# Modularización
+
+
