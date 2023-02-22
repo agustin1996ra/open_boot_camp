@@ -1,4 +1,6 @@
-# Django - Introducción
+# Django
+
+## Introducción
 
 ## Presentación
 
@@ -218,9 +220,9 @@ urlpatterns = [
 
 Una vez realizados estos cambios en los archivos, podemos ejecutar nuestro live server y comprobar que en la dirección `ip/saludo/` se muestra el texto indicado en la vista.
 
-# Rutas y plantillas
+## Rutas y plantillas
 
-## Rutas con parámetros
+### Rutas con parámetros
 
 Las rutas con parámetros nos vana permitir, recepcionar variables a través de la url que vamos a poder utilizar en nuestra vista.
 Hasta el momento todas las rutas que hemos agregado al proyecto "Hola mundo", son rutas estáticas. No están recibiendo ninguna información de la url.
@@ -265,7 +267,7 @@ y darle la ruta a nuestra vista seguido de el valor de nuestra variable. En este
 
 Esto nos sera muy util a la hora de poder, a través de una ruta a una publicación, una noticia, un producto, construyendo la ruta del objeto que deseamos consultar. Para poder empezar a vincular el contenido de forma mas interactiva.
 
-## Uso de plantillas
+### Uso de plantillas
 
 > Vamos a crear un nuevo proyecto llamado plantillas
 
@@ -333,7 +335,7 @@ def simple(request):
 </html>
 ```
 
-## Uso de contextos
+### Uso de contextos
 
 A lo largo de esta sección se vera como generar plantillas de contexto dinámico.
 
@@ -387,7 +389,7 @@ Para utilizar el valor de contexto en la plantilla, debemos usar dobles llaves, 
 
 En el contexto que le pasamos a la plantilla, no solo podemos pasarle nombres de llaves, sino también le podemos pasar objetos, y sus variables y métodos asociados.
 
-## Bucles y condicionales en plantillas
+### Bucles y condicionales en plantillas
 
 En esta sección vamos a ver como recorrer estructuras de datos, para completar nuestras plantillas.
 
@@ -465,11 +467,11 @@ Esta plantilla, se comportara de esta manera:
 
 Como podemos observar, que la palabra `code` esta en negrita, y las otras no.
 
-## Comentarios y filtros
+### Comentarios y filtros
 
 En esta sección vamos a ver cosas útiles para la hora de trabajar sobre las plantillas, como son los comentarios y los filtros.
 
-### Comentarios
+#### Comentarios
 
 Los comentarios html, son visibles cuando uno inspecciona la pagina desde el navegador, pero ahora veremos comentarios que no serán visibles, ya que django no los renderizará en el navegador.
 
@@ -503,7 +505,7 @@ Los comentarios html, son visibles cuando uno inspecciona la pagina desde el nav
 </html>
 ```
 
-### Filtros
+#### Filtros
 
 Supongamos que quiero con el ejemplo anterior, poner luego de la renderización de los objetos de la lista `categories`, el total de elementos. Esto podría realizarlo creando una nueva variable, en el archivo `views.py` donde se almacene el largo de la lista, o también lo puedo hacer utilizando un filtro en la plantilla.
 
@@ -546,7 +548,7 @@ El resultado sera el siguiente:
 
 Completar con todos los filtros en Django desde la documentación oficial.
 
-## Archivos estáticos
+### Archivos estáticos
 
 Creamos un nuevo proyecto con el comando `django-admin startproject estáticos`
 
@@ -605,7 +607,7 @@ Podemos ver que el resultado de nuestra pagina tiene los estilos especificados e
 
 ![css estático](./img/archivo%20estatico%20css.jpg)
 
-## Herencia de plantillas
+### Herencia de plantillas
 
 En esta sección, vamos a trabajar con otro proyecto django llamado `herencia`.
 
@@ -809,7 +811,7 @@ Como se puede ver, los bloques `styles` y `scripts`, no los estoy usando, eso es
 
 Lo que nos permite eso no solo es, reducir la cantidad de repeticiones en las plantillas, si no que en el caso de necesitar agregar algo en nuestra pagina, solo deberemos agregarla a la plantilla base. Por ejemplo, si en esta quisiéramos agregar el nombre de la empresa en el menu de navegación, simple mente sería agregar una linea, a dicho archivo, sin tener que controlar cuestiones de consistencia estética entre las diferentes paginas de nuestro proyecto.
 
-## Enlace e inclusión
+### Enlace e inclusión
 
 En esta sección vamos a estar trabajando sobre el mismo proyecto que en la sección anterior. Lo primero que vamos a hacer es agregar un path para la ruta raíz.
 
@@ -871,7 +873,7 @@ Al agregar los nombres de las direcciones, utilizaremos un comando de django, co
 <body>
     <nav>
         <ul>
-            <!-- Aqui es donde agregaremos los nombres, de las
+            <!-- Aquí es donde agregaremos los nombres, de las
              direcciones, utilizando un comando de django -->
             <li><a href="{% url 'herencia' %}">Herencia</a></li>
             <li><a href="{% url 'ejemplo' %}">Ejemplo</a></li>
@@ -960,17 +962,155 @@ Por ejemplo, otro caso donde podríamos seguir modularizando es en el caso del f
 </html>
 ```
 
-Y de esta manera seguir atomizando un poco mas nuestro proyecto. Esto es importante en la medida de lo posible, ir atomizando, nuestro código para hacerlo mas manejable y mas fácil de leer. 
+Y de esta manera seguir atomizando un poco mas nuestro proyecto. Esto es importante en la medida de lo posible, ir atomizando, nuestro código para hacerlo mas manejable y mas fácil de leer.
 
-## Documentación oficial
+### Documentación oficial
 
 En esta sección, vamos a explorar la documentación de django, para entender como navegar la en caso de tener alguna duda o un problema, que nos sea util.
 
-## Practica de plantillas
+### Practica de plantillas
 
 El objetivo de esta practica es muy sencillo, vamos a hacer una pagina con dos urls, en una sección inicial, que va ocupar el directorio raíz, vamos a tener una imagen nuestra con info, y en una segunda sección vamos listar un conjunto de imágenes que harán las veces de nuestro porfolio.
 
+## Vistas y modelos
 
-# Modularización
+### Modularización
 
+En esta sección vamos a ver el concepto de modularización.
 
+Gracias al concepto de modularización vamos a poder reciclar, gran parte de nuestros proyectos en django, no solo la parte del frontal y las plantillas, si no también en la parte de las aplicaciones y el backend.
+
+Para poder entender esto, vamos a profundizar aún más en la arquitectura de django.
+
+Hasta ahora los proyectos que venimos desarrollando, hemos estado trabajando en la aplicación principal de nuestros proyectos.
+
+Pero debemos entender que el el desarrollo de nuestros proyectos en django, van a estar conformadas por mas de una aplicación.
+
+Y para cumplir con el propósito de que nuestros proyectos sean modulares, tenemos que pensar muy bien cuales serán las acciones que nuestro proyecto debe realizar y cumplir, y para poder llevar a adelante un buen diseño de aplicaciones que se encarguen de cumplir las metas de esas acciones de nuestro proyecto.
+
+Para entender de mejor manera esto, vamos a ver un ejemplo:
+
+Supongamos que tenemos que desarrollar el proyecto de un portal de noticias, para ello, tenemos que cumplir con ciertas tareas que serán necesarias para que este cuente con la funcionalidades requeridas.
+
+En este ejemplo podríamos tener las siguientes aplicaciones:
+
+- Gestor de post (publicaciones)
+- Login social, con un gestor de sesiones
+- Un gestor de comentarios en las publicaciones
+- Gestor de anuncios
+- Gestionar el compartir en redes sociales.
+
+![ejemplo de un proyecto modularizado](./img/ej-modularizacion.jpg)
+
+Entonces a la hora de encarar un proyecto con muchas funciones, en ves de que una sola aplicación tenga programada la lógica de todas estas características, vamos a partir el desarrollo de las características en diferentes aplicaciones. Para que a la hora de abordar el desarrollo, no terminemos con un código espagueti, y una aplicación que si falla perdemos todas las funcionalidades de nuestro proyecto.
+
+Y supongamos ahora que tenemos que desarrollar un proyecto de un periódico digital, en este tendremos una aplicación de gestor de suscripciones, otra de los feed, y otra en la que se le ofrece al usuario una ventanilla de pagos. Pero también seguramente necesitaremos un gestor de sesiones, entonces, si nosotros en el proyecto anterior, ya habíamos desarrollado esa funcionalidad en una aplicación modular, tranquilamente podemos incorporarla en este nuevo proyecto de forma sencilla.
+
+Para poder lograr este proceso de forma solida, las aplicaciones deben ser auto suficientes, esto quiere decir que deben tener su modelo de datos, su base de datos, sus vistas y plantillas donde se muestren los datos, todo de forma integrada. Entonces a la hora de reciclar una aplicación será, una tarea muy sencilla y practica.
+
+Y solo deberemos ocuparnos de integrar la estética del modulo que estamos importando.
+
+#### Práctica
+
+Ahora haremos un proyecto de practica, donde crearemos mas de una aplicación.
+Creamos un nuevo proyecto llamado modularización. Y una segunda aplicación llamada comentarios.
+
+```powershell
+> django-admin startproject modularización
+> cd .\modularización\
+> python manage.py startapp comentarios
+```
+
+![arq de módulos](./img/modularizacion.jpg)
+
+Podemos ver en la arquitectura del modulo que hemos creado, que este ya cuenta con su propia estructura. Y que esta consiste por partes ya conocidas, y otras nuevas.
+
+Para agregar correctamente la aplicación en nuestro proyecto, debemos incluirla en la lista de `INSTALLED_APPS`  del archivo `settings.py`. Como habita en la raíz del proyecto, podemos agregarla directamente en, con el nombre del directorio que la contiene, en este caso `comentarios`.
+
+Se puede usar el comando `check` para confirmar que la aplicación esta configurada correctamente.
+
+```powershell
+> python manage.py check comentarios
+System check identified no issues (0 silenced).
+```
+
+### Modelos de datos
+
+Para crear un modelo de datos en django, en vez de crear tablas, sus campos y relaciones, vamos a crear clases en lenguaje python. Y a la hora e crear registros, estaremos creado objetos a partir de las clases. Entonces el orm de django, por cada clase que creemos, creara una tabla. Donde cada atributo de nuestra clase sera una columna en una tabla.
+
+De esta manera django nos permite migrar de un lenguaje de base de datos a otro, ya que la estructura de clases es igual, y django se encarga de la comunicación con el servidor de base de datos. Para ello solo debemos cambiar la configuración del motor de base de datos en el archivo `settings.py`.
+
+Para practicar este concepto de modelación de datos, vamos a usar el proyecto "modularización".
+
+Los modelos de datos, se escriben dentro de el archivo `models.py` de las aplicaciones secundarias de un proyecto. Utilizaremos la aplicación comentarios para crear nuestro primer modelo.
+
+```python
+# models.py
+from django.db import models
+
+# Create your models here.
+```
+
+Podemos ver que, ya por defecto, django nos importa de la librería de bases de datos `models`, esto es por que sera la clase que vamos a extender al crear nuestros modelos.
+
+Una primera modelación para nuestros comentarios podría ser:
+
+```python
+# models.py
+from django.db import models
+
+class comments(models.Model):
+
+    name = models.CharField(max_length=50, null=False)
+    score = models.IntegerField(default=3)
+    comment = models.TextField(max_length=1000, null=True)
+
+    def __str__(self):
+        return self.name
+
+```
+
+Creamos una clase `comments`, que tiene los atributos de `name` que es un `CharField` que tiene un máximo de caracteres de 50 y que no puede ser nulo, otro atributo es la puntuación `score` que por defecto si no se especifica es 3, y por ultimo el contenido del comentario como `comment` que puede ser nulo y que tiene un máximo de caracteres de 1000
+
+Para el siguiente paso debemos usar el comando `makemigrations`, que se usaba cuando creamos el proyecto para que se ejecuten las migraciones de iniciación, y cada vez que cambiemos nuestro modelo de datos, debemos volver a ejecutarlo.
+
+```powershell
+PS C:\rep\open_boot_camp\django\prueba\modularizacion> python manage.py makemigrations
+Migrations for 'comentarios':
+  comentarios\migrations\0001_initial.py
+    - Create model comments
+```
+
+Este comando creara un archivo de migración inicial, donde se crearan las migraciones para el modelo de la aplicación comentarios.
+
+Una vez creada la migración, nos queda ejecutarla con el comando `migrate`.
+
+```powershell
+PS C:\rep\open_boot_camp\django\prueba\modularizacion> python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, comentarios, contenttypes, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK 
+  Applying contenttypes.0002_remove_content_type_name... OK  
+  Applying auth.0002_alter_permission_name_max_length... OK  
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK    
+  Applying auth.0009_alter_user_last_name_max_length... OK   
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK  
+  Applying comentarios.0001_initial... OK
+  Applying sessions.0001_initial... OK
+```
+
+Como podemos ver en la base de datos, se ha ejecutado correctamente el comando de migración, creando una tabla llamada `comentarios_comments`. Al crear una clase sin especificar nada sobre el atributo id, django creara ese campo por defecto.
+
+![modelo de datos](./img/modelo_de_datos.jpg)
