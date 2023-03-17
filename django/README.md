@@ -1,13 +1,13 @@
 # Django
 
-## Introducción
+## 1. Introducción
 
-## Presentación
+### Presentación
 
 Profe: Juan José Ruiz
 Desarrollo web con python Django
 
-### Que vamos a aprender?
+#### Que vamos a aprender?
 
 - Conceptos básicos
 - Arquitectura
@@ -22,15 +22,15 @@ Que es necesario saber:
 - html
 - css
 
-## Instalación
+### Instalación
 
-### Requerimientos de software
+#### Requerimientos de software
 
 - python
 - pip
 - django
 
-### Comprobamos que django esta instalado
+#### Comprobamos que django esta instalado
 
 Para ello vamos a crear un proyecto de prueba para comprobar, que se ha instalado correctamente. Usando el comando:
 
@@ -40,7 +40,7 @@ django-admin startproject holamundo
 
 Si django se ha ejecutado de forma correcta veremos en la carpeta que ejecutamos el comando, que se creo una carpeta con el nombre del proyecto, y una estructura interna de archivos y directorios.
 
-## Patrón de arquitectura
+### Patrón de arquitectura
 
 Django es un framework gratuito hecho en python
 Un framework es un conjunto de herramientas, librerías y estructura, que nos permite trabajar de forma ágil. A la hora de trabajar en el desarrollo web no es necesario estar inventando la rueda, si no que nos ayudamos de los frameworks para reutilizar herramientas, y desarrollar ágilmente.
@@ -53,7 +53,7 @@ Todas estas acciones son comunes en el desarrollo web.
 
 Ademas django nos facilitara una estructura de arquitectura de nuestra pagina.
 
-### Patrón MVC
+#### Patrón MVC
 
 ![model view controller](img/mvc.jpg)
 En este modelo lo que tenemos es un usuario, que realiza una petición a una url, es decir esta en el navegador y escribe la dirección de una pagina web.
@@ -72,7 +72,7 @@ Los controladores contiene la lógica y la vista tiene las plantillas donde se d
 
 De esta arquitectura mvc es de donde deriva la arquitectura de django mtv.
 
-### Patrón de arquitectura MTV
+#### Patrón de arquitectura MTV
 
 MTV (model template view)
 Los mcv son pensados en un principio para componentes más pequeños, y mtv para estructuraras de componentes o aplicaciones mas grandes. por eso django decidió renombrarlas para evitar la polémica.
@@ -80,7 +80,7 @@ Los mcv son pensados en un principio para componentes más pequeños, y mtv para
 En esta funciona exactamente igual, solo que a los controladores los vamos a llamar vistas y a las vistas templates/plantillas.
 ![model template view](img/mtv.jpg)
 
-## Estructura de archivos
+### Estructura de archivos
 
 En la carpeta del proyecto veremos un archivo `manage.py` y una carpeta que es del mismo nombre de un proyecto. Django se divide en aplicaciones, estas serán carpetas.
 El archivo `manage.py` es muy importante, pero no es un archivo que nosotros vallamos a modificar, este se encarga de ponernos a disposición la estructura de nuestro proyecto para que podamos desde la terminal trabajar con comandos propios de django. Es el que nos va a permitir gestionar nuestro proyecto.
@@ -95,19 +95,19 @@ Tenemos  dentro de esta estructura dos archivos que nos van a ayudar con el serv
 
 Luego tenemos los archivos que si vamos a estar manipulando `settings.py` y `urls.py`.
 
-### `urls.py`
+#### `urls.py`
 
 Este archivo se va encargar de asociar las direcciones url con las vistas/views.
 En este archivos tenemos una lista que se llama `urlpatterns`, donde vamos a ir escribiendo todas las urls asociadas a las vistas con las que las vamos a ir controlando.
 
-### `settings.py`
+#### `settings.py`
 
 En este archivo vamos a poner las configuraciones del paquete. Dentro de este archivo hay una lista llamada `INSTALLED_APPS`, donde tendremos las aplicaciones que vienen instaladas por defecto.
 También podremos ver los templates, los midwares(aquí encontraremos aps de seguridad.)
 
 También podremos configurar las conexiones con la base de datos y el motor controlador.
 
-#### Installed_apps
+##### Installed_apps
 
 - `django.contrib.admin`
 Este sirve para establecer un panel de control de administración.
@@ -122,7 +122,7 @@ Para gestionar los mensajes
 - `django.contrib.staticsfiles`
 Para controlar la carga de archivos estáticos
 
-## Primer Hola mundo en Django
+### Primer Hola mundo en Django
 
 En el archivo `urls.py`, lo que hacemos es asociar cada una de las rutas de nuestro proyecto con una vista.
 
@@ -158,7 +158,7 @@ Operations to perform:
 Al ejecutar el comando, django debería habernos creado una base de datos.
 > La extension para poder ver la base de datos SQLlite, SQLtools SQLlite.
 
-### Comprobar el proyecto con el servidor de pruebas
+#### Comprobar el proyecto con el servidor de pruebas
 
 Para poder ejecutar el proyecto en el servidor de pruebas, usaremos el comando `python manage.py runserver`.
 
@@ -181,7 +181,7 @@ Al hacer click en el enlace ip del servidor, debería abrirnos una pagina en el 
 
 Y para interrumpir la ejecución del servidor debemos apretar `ctrl`+`C`.
 
-### Ahora vamos a hacer nuestro primer Hola Mundo
+#### Ahora vamos a hacer nuestro primer Hola Mundo
 
 Para ello vamos a necesitar un archivo de vistas `views.py`. Que es donde vamos a declarar las vistas con las que vamos a trabajar.
 
@@ -220,7 +220,7 @@ urlpatterns = [
 
 Una vez realizados estos cambios en los archivos, podemos ejecutar nuestro live server y comprobar que en la dirección `ip/saludo/` se muestra el texto indicado en la vista.
 
-## Rutas y plantillas
+## 2. Rutas y plantillas
 
 ### Rutas con parámetros
 
@@ -972,7 +972,7 @@ En esta sección, vamos a explorar la documentación de django, para entender co
 
 El objetivo de esta practica es muy sencillo, vamos a hacer una pagina con dos urls, en una sección inicial, que va ocupar el directorio raíz, vamos a tener una imagen nuestra con info, y en una segunda sección vamos listar un conjunto de imágenes que harán las veces de nuestro porfolio.
 
-## Vistas y modelos
+## 3. Vistas y modelos
 
 ### Modularización
 
@@ -1114,3 +1114,57 @@ Running migrations:
 Como podemos ver en la base de datos, se ha ejecutado correctamente el comando de migración, creando una tabla llamada `comentarios_comments`. Al crear una clase sin especificar nada sobre el atributo id, django creara ese campo por defecto.
 
 ![modelo de datos](./img/modelo_de_datos.jpg)
+
+#### Modificación de un modelo de datos
+
+En el caso que deseáramos modificar un modelo de datos, lo haremos directamente en el archivo models.py de la aplicación. Una vez realizada la modificación crearemos la migración (django detectara el cambio) con el comando `python3 manage.py makemigrations` y luego ejecutaremos la migración con el comando `python3 manage.py migrate`.
+
+```python
+# models.py
+from django.db import models
+
+class comments(models.Model):
+
+    name = models.CharField(max_length=50, null=False)
+    score = models.IntegerField(default=3)
+    comment = models.TextField(max_length=1000, null=True)
+    date = models.DateField(null=True)
+    
+
+    def __str__(self):
+        return self.name
+```
+
+![cambio de modelo](img/cambio%20modelo%20de%20datos.png)
+
+#### En caso de modificación sin valor default
+
+Como vemos en la modificación anterior, se especifica que el valor date, puede ser nulo, hay que tener en cuenta esto, ya que como la base de datos puede contener datos ya, quiere decir que se agregan campos a filas ya existentes. Estas si no tienen permitido tener un valor nulo, en la definición del nuevo campo, generara un error al hacer el plan de migración, ya que django se dará cuenta del error. Este error interrumpirá la creación del plan de  migración, y nos dará dos opciones, proveer un valor por default en el momento, desde la terminal o cancelar la creación del plan de migración y darle un valor por default al campo desde el archivo de modelos, o permitir que tenga valor nulo.
+
+#### Planes de migración
+
+Para entender mejor, que es lo que hace django cuando modificamos el modelo de datos y le pedimos que haga un plan de migración para esas modificaciones, vamos a observar, los archivos `.py` que crea en la carpeta migrations.
+
+```python
+# 0002_comments_date.py
+# Generated by Django 3.2.12 on 2023-03-02 21:28
+
+from django.db import migrations, models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        ('comentarios', '0001_initial'),
+    ]
+
+    operations = [
+        migrations.AddField(
+            model_name='comments',
+            name='date',
+            field=models.DateField(null=True),
+        ),
+    ]
+```
+
+Aca vemos las acciones que django se dio cuenta que debía hacer para poder agregar a nuestra tabla de comentarios el campo de la fecha que le habíamos especificado en el modelo de datos.
