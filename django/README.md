@@ -1168,3 +1168,67 @@ class Migration(migrations.Migration):
 ```
 
 Aca vemos las acciones que django se dio cuenta que debía hacer para poder agregar a nuestra tabla de comentarios el campo de la fecha que le habíamos especificado en el modelo de datos.
+
+Estas migraciones van generando un historial, que nos permite volver atrás en la estructura de datos.
+
+### Delegación de rutas
+
+En esta parte del desarrollo vamos a ver como conectar, nuestro proyecto general a el contenido de las aplicaciones. Con el objetivo de luego poder trabajar con los modelos de las aplicaciones.
+
+Vamos a comenzar creado un fichero `urls.py` dentro de nuestra aplicación, en este caso seguiremos trabajando con el proyecto `modularizacion`, y conectaremos la aplicación `comentarios`.
+
+Vamos a trabajar en la aplicación, como anteriormente trabajamos sobre el proyecto, es decir configuraremos las urls y las vistas de la aplicación, como si fuese un proyecto.
+
+Copiamos la estructura del archivo `urls.py` de nuestro proyecto general y la pegamos en el nuevo `urls.py` de la aplicación comentarios.
+
+Para empezar vamos solamente a configurar un `hola mundo`
+
+```python
+# urls.py
+
+from django.contrib import admin
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('test/', views.test, name='test')
+]
+
+```
+
+```python
+# views.py
+
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def test(request):
+    return HttpResponse("Funciona correctamente")
+
+```
+
+Todo esto esta configuración esta dentro de nuestra aplicación, lo que quiere decir es que si nosotros corremos el live server, no podremos acceder a esta vista a través de la url que acabamos de configurar.
+Por que el proyecto general esta gobernado por la configuración que tiene dentro de `modularizacion`, y si vemos el archivo `urls.py` de este, no tenemos todavía acceso a lo que ocurre dentro de la aplicación `comentarios`.
+
+```python
+# urls.py (modularizacion)
+from django.contrib import admin
+from django.urls import path
+from django.urls import include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('comentarios/', include('comentarios.urls'))
+]
+
+```
+
+Como se ve en arriba, utilizamos la función include, que debimos importarla. Des esta manera integramos a nuestro proyecto todas las urls que ese encuentran el el archivo `urls.py` de nuestra aplicación comentarios. Para acceder a estas debemos darle la dirección, precedida del nombre de la aplicación a la que pertenece. Por ejemplo: `http://127.0.0.1:8000/comentarios/test/`
+
+![test comentarios](img/test%20comentarios.png)
+
+Con el objetivo de dejar las configurado para el próximo tema, creamos una vista simple llamada create, para abordar luego CRUD, la completamos con un
+HttpResponse, y le dejamos configurada una url con el nombre create.
+
+### Creación y borrado de datos
+
