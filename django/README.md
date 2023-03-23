@@ -1232,3 +1232,7 @@ HttpResponse, y le dejamos configurada una url con el nombre create.
 
 ### Creación y borrado de datos
 
+En esta sección seguiremos utilizando el proyecto de modularizacion. Una cuestión a tener en cuenta, que pasamos por alto, es que en la construcción de los modelos utilizamos el nombre "comments" pero los modelos por convención siempre deben ir con la primera letra en mayúsculas y en singular "Comment".
+
+
+
