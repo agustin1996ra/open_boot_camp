@@ -1234,5 +1234,115 @@ HttpResponse, y le dejamos configurada una url con el nombre create.
 
 En esta sección seguiremos utilizando el proyecto de modularizacion. Una cuestión a tener en cuenta, que pasamos por alto, es que en la construcción de los modelos utilizamos el nombre "comments" pero los modelos por convención siempre deben ir con la primera letra en mayúsculas y en singular "Comment".
 
+Lo normal a la hora de crear un modelo, seria crear un formulario para poder ingresar datos a ese modelo, sin embargo todavía no hemos llegado a esa parte, y por ahora agregaremos datos desde la vista. Entonces cuando accedamos a la ruta vamos a crear un dato automáticamente, esto no es un comportamiento usual ni recomendable. Pero nos servirá para ver como se crean dichos objetos.
 
+#### Creamos un comentario desde views
 
+Para crear un objeto, tenemos que importar a nuestro archivo `views.py` la clase `Comment` del archivo `models.py`.
+
+Como podemos observar desde la configuración de nuestro modelo, sabemos los datos que se deben aportar para crear un comentario.
+
+```python
+from django.db import models
+
+class Comment(models.Model):
+
+    name = models.CharField(max_length=50, null=False)
+    score = models.IntegerField(default=3)
+    comment = models.TextField(max_length=1000, null=True)
+    date = models.DateField(null=True)
+    signature = models.CharField(max_length=100, default="Firma")
+
+    def __str__(self):
+        return self.name
+```
+
+Debemos darle un nombre, ya que este no puede ser nulo. Los demás valores de nuestro dato, pueden ser nulos. Ya que el `score` tiene un valor por defecto, `comment` puede ser nulo, también `date` y `signature` tiene un valor por defecto.
+
+Para crear este dato, vamos a crear un objeto, llamando a la clase `Comment` y le pasaremos como argumentos name="Agus", score=5, comment="Este es un comentario".
+Y luego para generar la acción de guardado, vamos a utilizar la función `save()`, como función de nuestro objeto. Esto le indicara a django que pase estos argumentos del objeto a la base de datos.
+
+```python
+# views.py
+from django.shortcuts import render
+from django.http import HttpResponse
+from .models import Comment
+
+def test(request):
+    return HttpResponse("Funciona correctamente")
+
+def create(request):
+    comment = Comment(name="Agus", score=5, comment="Este es un comentario.")
+    comment.save()
+    return HttpResponse("Ruta para probar la creación de modelos")
+```
+
+Al recargar la pagina `comentarios/create/` debería haber ejecutado estas acciones y se deberá ver reflejadas en la base de datos.
+
+![primer registro](./img/primer-registro-bd.jpg)
+
+##### Otra forma de crear un registro
+
+Esta no es la única forma de crear un registro, vamos a ver otro ejemplo, de como hacerlo.
+
+```python
+# views.py
+from django.shortcuts import render
+from django.http import HttpResponse
+from .models import Comment
+
+def test(request):
+    return HttpResponse("Funciona correctamente")
+
+def create(request):
+    comment = Comment.objects.create(name="Nicolas")
+    return HttpResponse("Ruta para probar la creación de modelos")
+```
+
+De esta forma, se guardara por defecto, gracias a la función create, dentro de objects.
+
+![segundo registro](img/segundo-registro-bd.jpg)
+
+Podemos observar que django nos abstrae de tener que utilizar instrucciones sql, y nos deja con las herramientas de lógica que se explicitan en las vistas y utilizamos los objetos que preparamos de ante mano en los modelos.
+
+#### Eliminar un dato
+
+Para ello crearemos una vista nueva, con su respectiva url.
+
+Los siguiente sera encontrar el registro que deseamos eliminar de de nuestra base de datos, para ello vamos a crear un objeto, y a este le asignaremos el registro/dato que vamos a eliminar.
+
+```python
+# views.py
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from .models import Comment
+
+def delete(request):
+    comment = Comment.objects.get(id=1)
+    comment.delete()
+    return HttpResponse("Ruta para la eliminación de registros")
+```
+
+Podemos ver que utilizamos la función get, y le entregamos el valor de id, de registro, y luego eliminamos el registro asignado a ese objeto.
+
+![primer borrado](./img/borrado%20del%20primer%20registro.jpg)
+
+##### Otra forma de borrado
+
+Esta consiste en utilizar las funciones objects
+
+```python
+# views.py
+from django.shortcuts import render
+from django.http import HttpResponse
+from .models import Comment
+
+def delete(request):
+    Comment.objects.filter(id=2).delete()
+    return HttpResponse("Ruta para la eliminación de registros")
+```
+
+![segundo borrado de registros](img/segundo%20borrado%20de%20registrobd.jpg)
+
+### Estructuras y claves foráneas
