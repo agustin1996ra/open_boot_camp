@@ -1439,3 +1439,11 @@ Y en este caso utilizamos la configuración `models.CASCADE`. Que eliminara en f
 Siempre que utilicemos claves foráneas es muy importante, especificar las acciones al menos en el borrado, y si es posible también en el actualizado de datos.
 
 ### Seeding y paquetes
+
+Ahora vamos a poblar nuestra base de datos para hacer pruebas con esta. Para realizar esta tarea vamos a utilizar un faker factory. Que nos permitirá ingresar datos falsos en la base de datos y poder realizar acciones sobre ella.
+
+Esta es una aplicación que no viene por defecto integrada en las aplicaciones django, por lo que también nos servirá de ejemplo de las instalaciones de paquetes en un proyecto.
+
+Para realizar la instalacion vamos de esta aplicacion, entramos en su pagina de github <https://github.com/Brobin/django-seed>.
+
+Esta nos dice que demos utilizar el comando `pip install django-seed`
