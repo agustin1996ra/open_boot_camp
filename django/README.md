@@ -1346,3 +1346,96 @@ def delete(request):
 ![segundo borrado de registros](img/segundo%20borrado%20de%20registrobd.jpg)
 
 ### Estructuras y claves foráneas
+
+Para poner en practica estos conocimientos, vamos a crear un nuevo proyecto llamado `my_blog`, en este vamos a crear una aplicación llamada `post`.
+> Y también realizaremos las configuraciones para una correcta modularizacion, configurando los archivos urls.
+
+Creamos los modelos de la aplicación post:
+
+```python
+from django.db import models
+from datetime import date
+
+class Author(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.name
+    
+class Entry(models.Model):
+    headline = models.CharField(max_length=255)
+    body_text = models.TextField()
+    public_date = models.DateField(default=date.today)
+    rating = models.IntegerField(default=5)
+
+    def __str__(self):
+        return self.headline
+
+```
+
+Ahora vamos a introducir un concepto nuevo en el modelado de datos, hasta ahora habíamos creado modelos independientes, lo que quiere decir que los modelos no tenían relación entre ellos, osea no eran interdependientes.
+
+La parte mas interesante de hacer modelado de datos, es poder relacionarlos entre si.
+
+Esto podemos hacerlo desde las claves foráneas. Estas nos permiten relacionar los registros de una tabla a los contenidos de otra tabla.
+
+Refiriendo un valor que contiene una clave foránea, a la clave primaria de otra tabla.
+
+En django se emplean las claves foraneas agregando un valor que va a contener dentro del modelo la relación a los registros de otro modelo.
+
+```python
+from django.db import models
+from datetime import date
+
+class Author(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.name
+    
+class Entry(models.Model):
+    author = models.ForeignKey(Author)  # Esta es la clave foránea que apunta a el id del modelo author
+    headline = models.CharField(max_length=255)
+    body_text = models.TextField()
+    public_date = models.DateField(default=date.today)
+    rating = models.IntegerField(default=5)
+
+    def __str__(self):
+        return self.headline
+```
+
+#### Que suscede si un registro tiene una clave foránea que apunta a un registro que ha si do eliminado?
+
+Para poder adelantarnos a este inconveniente, se puede en la configuración de la clave foránea darle instrucciones de que hacen en este supuesto error.
+
+```python
+from django.db import models
+from datetime import date
+
+class Author(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.name
+    
+class Entry(models.Model):
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    headline = models.CharField(max_length=255)
+    body_text = models.TextField()
+    public_date = models.DateField(default=date.today)
+    rating = models.IntegerField(default=5)
+
+    def __str__(self):
+        return self.headline
+
+```
+
+La variable que se ocupa de este incidente, es `on_delete=`.
+Y en este caso utilizamos la configuración `models.CASCADE`. Que eliminara en forma de cascada los registros `Entry` que apuntaban en este caso a el autor que fue eliminado.
+
+Siempre que utilicemos claves foráneas es muy importante, especificar las acciones al menos en el borrado, y si es posible también en el actualizado de datos.
+
+### Seeding y paquetes

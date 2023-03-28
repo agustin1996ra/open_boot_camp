@@ -14,5 +14,5 @@ def create(request):
 def delete(request):
     # comment = Comment.objects.get(id=1)
     # comment.delete()
-    Comment.objects.filter(id=2).delete()
+    Comment.objects.filter(id=3).delete()
     return HttpResponse("Ruta para la eliminación de registros")
