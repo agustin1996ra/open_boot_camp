@@ -1444,6 +1444,6 @@ Ahora vamos a poblar nuestra base de datos para hacer pruebas con esta. Para rea
 
 Esta es una aplicación que no viene por defecto integrada en las aplicaciones django, por lo que también nos servirá de ejemplo de las instalaciones de paquetes en un proyecto.
 
-Para realizar la instalacion vamos de esta aplicacion, entramos en su pagina de github <https://github.com/Brobin/django-seed>.
+Para realizar la instalación vamos de esta aplicación, entramos en su pagina de github <https://github.com/Brobin/django-seed>.
 
-Esta nos dice que demos utilizar el comando `pip install django-seed`
+Esta nos dice que debemos utilizar el comando `pip install django-seed`
