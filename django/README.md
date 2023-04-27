@@ -1446,4 +1446,184 @@ Esta es una aplicación que no viene por defecto integrada en las aplicaciones d
 
 Para realizar la instalación vamos de esta aplicación, entramos en su pagina de github <https://github.com/Brobin/django-seed>.
 
-Esta nos dice que debemos utilizar el comando `pip install django-seed`
+Esta nos dice que debemos utilizar el comando `pip install django-seed`, y luego debemos agregar en la lista `INSTALLED_APPS` del archivo `settings.py` el nombre de la aplicación, `django_seed`. Para comprobar si hemos hecho bien la instalación, utilizaremos el comando `python manage.py check django_seed`.
+
+También debemos instalar manualmente una dependencia de este modulo, que se llama `psycopg2`, utilizando el comando `pip install psycopg2-binary`.
+
+#### Poblar una base de datos
+
+Para utilizar el modulo `django_seed`, usaremos el comando `python manage.py seed post --number=50`, para incorporar 50 lineas a las tablas de la base de datos de la aplicación `post`.
+
+### Consulta de datos 1
+
+Practicaremos hacer consultas con la base de datos que poblamos. Tendremos que trabajar sobre los archivos `views.py` y `urls.py`. Y también crearemos una plantilla para "pintar" lo valores de la consulta.
+
+En el archivo `views.py` armamos una funcion que le pida los datos al modelo, asignándolos a la variable `authors`, luego se lo pase por contexto a la plantilla.
+
+```python
+# views.py
+from django.shortcuts import render
+from .models import Author, Entry
+
+def queries(request):
+    # Obtener todos los elementos
+    authors = Author.objects.all()
+    return render(request, 'post/queries.html', {'authors': authors})
+
+```
+
+En el archivo `urls.py` configuramos un path a la vista que acabamos de crear.
+
+```python
+# urls.py
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('queries/', views.queries, name="queries")
+]
+```
+
+Y creamos una plantilla `queries.html`, para pintar los datos. Esta la alojaremos en la carpeta `templates/post/`. Utilizaremos la estructura de una lista html, que contendrá un ciclo for dentro, para pintar cada una de las filas de la tabla `Authors`.
+
+```html
+<!-- queries.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>Todos los autores</h3>
+    <ul>
+        {% for author in authors %}
+        <li>{{ author.name }} ( {{author.email}} )</li>
+        {% endfor %}
+    </ul>
+    <h3>Total de autores: {{ authors|length }}</h3>
+</body>
+</html>
+```
+
+Si pensamos en lenguaje SQL a la hora de utilizar el método `objects.all`, estamos haciendo un `SELECT * FROM authors`
+
+#### Filtrado de datos por condición
+
+No siempre nos resultar interesante traer todos los datos, y preferiremos poder hacer consultas, aplicando filtros.
+
+Para ello vamos agregar a la vista una consulta con filtrado de datos.
+
+```python
+# views.py
+from django.shortcuts import render
+from .models import Author, Entry
+
+def queries(request):
+    # Obtener todos los elementos del modelo Author
+    authors = Author.objects.all()
+
+    # Obtener datos filtrados por condición
+    filtered = Author.objects.filter(email='kreed@example.com')
+    
+    return render(request, 'post/queries.html', {'authors': authors, 'filtered': filtered})
+
+```
+
+Y serán mostrados en la plantilla de la siguiente manera.
+
+```html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>Buscando autor donde email = kreed@example.com</h3>
+    <ul>
+        {% for elm in filtered %}
+        <li> {{elm.name}} | {{elm.email}} </li> 
+        {% endfor %}
+    </ul>
+
+    <h3>Todos los autores</h3>
+    <ul>
+        {% for author in authors %}
+        <li>{{ author.name }} ( {{author.email}} )</li>
+        {% endfor %}
+    </ul>
+    <h3>Total de autores: {{ authors|length }}</h3>
+    
+</body>
+</html>
+```
+
+Es importante entender que cuando usamos `objects.filter` como método, lo que recibiremos es una colección, lo que significa, que aunque nosotros sepamos que la búsqueda nos dará como resultado un solo registro, debemos de igual manera recorrer la colección. (como forma de desempaquetar los datos)
+
+Si este caso lo comparamos con el lenguaje SQL, estaríamos haciendo un `SELECT * FROM authors WHERE email = 'kreed@example.com'`.
+
+#### Obtener un único objeto
+
+En el caso de que deseemos pedir los datos de un solo registro, lo que debemos hacer es utilizar el método `objects.get`, en este caso pedimos al modelo el registro de autor asociado a el id 1.
+
+```python
+from django.shortcuts import render
+from .models import Author, Entry
+
+def queries(request):
+    # Obtener todos los elementos del modelo Author
+    authors = Author.objects.all()
+
+    # Obtener datos filtrados por condición
+    filtered = Author.objects.filter(email='kreed@example.com')
+
+    # Obtener un único objeto (filtrado)
+    author = Author.objects.get(id=1)
+    
+    return render(request, 'post/queries.html', {'authors': authors, 'filtered': filtered, 'author': author})
+
+```
+
+Podemos ver que cuando pintamos el valor del nombre, solo estamos haciendo referencia al objeto en si, esto sucede por que al llamar al objeto, se llama a su método string, que recordemos que tiene esta forma.
+
+```python
+def __str__(self):
+    return self.name
+```
+
+```html
+<!DOCTYPE html>kreed@example.com caso, no especificamos ningún dato, entonces utiliza el método string del objeto</p>
+    <p>{{author.email}}</p>
+
+    <h3>Buscando autor donde email = kreed@example.com</h3>
+    <ul>
+        {% for elm in filtered %}
+        <li> {{elm.name}} | {{elm.email}} </li> 
+        {% endfor %}
+    </ul>
+
+    <h3>Todos los autores</h3>
+    <ul>
+        {% for author in authors %}
+        <li>{{ author.name }} ( {{author.email}} )</li>
+        {% endfor %}
+    </ul>
+    <h3>Total de autores: {{ authors|length }}</h3>
+    
+</body>
+</html>
+```
+
+Y en este caso la consulta en lenguaje SQL seria: `SELECT * FROM authors WHERE id = 1`.
+
+#### Limitación de objetos de la consulta
+
+Otro de los puntos interesantes, es poder limitar la cantidad de elementos que recibimos de la consulta.
+
+Para ello vamos a hacer un slice de la colección con el `limits = Author.objects.all()[:10]`,agregando el los corchetes finales, y también de esa manera podemos especificar el offset.

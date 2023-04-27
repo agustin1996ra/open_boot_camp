@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>Obteniendo los elementos del 5 al 10 (offsets)</h3>
+    <ul>
+        {% for offset in offsets %}
+        <li>{{offset}} | {{offset.email}}</li>
+        {% endfor %}
+    </ul>
+    <h3>Obteniendo lo primeros 10 objetos (limits)</h3>
+    <ul>
+        {% for limit in limits %}
+        <li>{{limit}} | {{limit.email}}</li>
+        {% endfor %}
+    </ul>
+    <h3>Obteniendo un único elemento, en este caso filtrado por id</h3>
+    <p>{{author}} #podemos ver que en este caso, no especificamos ningún dato, entonces utiliza el método string del objeto</p>
+    <p>{{author.email}}</p>
+
+    <h3>Buscando autor donde email = kreed@example.com</h3>
+    <ul>
+        {% for elm in filtered %}
+        <li> {{elm.name}} | {{elm.email}} </li> 
+        {% endfor %}
+    </ul>
+
+    <h3>Todos los autores</h3>
+    <ul>
+        {% for author in authors %}
+        <li>{{ author.name }} ( {{author.email}} )</li>
+        {% endfor %}
+    </ul>
+    <h3>Total de autores: {{ authors|length }}</h3>
+    
+</body>
+</html>
+
