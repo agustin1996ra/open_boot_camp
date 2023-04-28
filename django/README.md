@@ -1406,7 +1406,7 @@ class Entry(models.Model):
         return self.headline
 ```
 
-#### Que suscede si un registro tiene una clave foránea que apunta a un registro que ha si do eliminado?
+#### Que sucede si un registro tiene una clave foránea que apunta a un registro que ha si do eliminado?
 
 Para poder adelantarnos a este inconveniente, se puede en la configuración de la clave foránea darle instrucciones de que hacen en este supuesto error.
 
@@ -1458,7 +1458,7 @@ Para utilizar el modulo `django_seed`, usaremos el comando `python manage.py see
 
 Practicaremos hacer consultas con la base de datos que poblamos. Tendremos que trabajar sobre los archivos `views.py` y `urls.py`. Y también crearemos una plantilla para "pintar" lo valores de la consulta.
 
-En el archivo `views.py` armamos una funcion que le pida los datos al modelo, asignándolos a la variable `authors`, luego se lo pase por contexto a la plantilla.
+En el archivo `views.py` armamos una función que le pida los datos al modelo, asignándolos a la variable `authors`, luego se lo pase por contexto a la plantilla.
 
 ```python
 # views.py
@@ -1666,7 +1666,7 @@ Existen varios tipos de siglas que nos indican que tipos de comparaciones, a con
 
 ### Actualización de datos
 
-Veremos con en el mismo proyecto, como con una logica orintada a objetos, podemos actualizar los datos de un registro. Para ello vamos a crear una nueva vista que de manera hardcode, cambiaremos el primer registro de la tabla autores.
+Veremos con en el mismo proyecto, como con una lógica orientada a objetos, podemos actualizar los datos de un registro. Para ello vamos a crear una nueva vista que de manera hardcode, cambiaremos el primer registro de la tabla autores.
 
 ```python
 # urls.py
