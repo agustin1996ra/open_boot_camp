@@ -1700,3 +1700,9 @@ Como vemos creamos un objeto con el método de consulta `.get(id=1)`, y sobre el
 ![base cambiada](./img/modificacion_bd.png)
 
 ### Relaciones uno a uno
+
+Para trabajar en esta sección y las siguientes donde abordaremos conceptos de modelado de datos, vamos a crear un nuevo proyecto llamado `relations`. Y para trabajar específicamente en esta sección crearemos una app llamada `onetoone`.
+
+Para ejemplificar esta relación, vamos a realizar un modelo de datos donde se relacionaran lugares o ubicaciones con restaurantes. Siendo que en una ubicación solo puede haber un restaurante, y un restaurante solo puede estar en un solo lugar.
+
+
