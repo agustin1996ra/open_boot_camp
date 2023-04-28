@@ -1627,3 +1627,76 @@ Y en este caso la consulta en lenguaje SQL seria: `SELECT * FROM authors WHERE i
 Otro de los puntos interesantes, es poder limitar la cantidad de elementos que recibimos de la consulta.
 
 Para ello vamos a hacer un slice de la colección con el `limits = Author.objects.all()[:10]`,agregando el los corchetes finales, y también de esa manera podemos especificar el offset.
+
+### Consulta de datos 2
+
+Agregaremos a nuestro repertorio mas tipos de consultas
+
+#### `order_by()`
+
+Ahora veremos como ordenar los resultados de la consulta. Para ello vamos a utilizar dos métodos concatenados `Author.objects.all().order_by('email')`. En este caso le indicamos que lo deseamos ordenar por la columna `email`.
+
+#### `filter()` con otras comparaciones
+
+También podremos hacer comparaciones en el tipo búsqueda filtrado, que no solo sean la comparación igual.
+
+```python
+ # Obtener todos los elementos que su id sea menor o igual a 15
+    filtereds = Author.objects.filter(id__lte=15)
+```
+
+Existen varios tipos de siglas que nos indican que tipos de comparaciones, a continuación algunos:
+
+- `__lte`: menor o igual (lower than equals)
+- `__gte`: mayor o igual (grater than equals)
+- `__lt`: menor que (lower than)
+- `__gt`: mayor que (greater than)
+- `__contains`: contiene
+- `__icontains`: contiene insensible a mayúsculas y minúsculas
+- `__exact`: exacto
+- `__iexact`: exacto insensible a mayúsculas y minúsculas
+- `__in`: equivalente a in sql
+- `__startswith`: empieza con
+- `__istartswith`: empieza con insensible a mayúsculas y minúsculas
+- `__endswith`: finaliza con
+- `__iendswith`: finaliza con insensible a mayúsculas y minúsculas
+- `__range`: rango
+
+[Documentación](https://docs.djangoproject.com/en/4.2/ref/models/querysets/#id4)
+
+### Actualización de datos
+
+Veremos con en el mismo proyecto, como con una logica orintada a objetos, podemos actualizar los datos de un registro. Para ello vamos a crear una nueva vista que de manera hardcode, cambiaremos el primer registro de la tabla autores.
+
+```python
+# urls.py
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('queries/', views.queries, name="queries"),
+    path('update/', views.update, name="update")
+]
+
+```
+
+```python
+# views.py
+
+from django.shortcuts import render
+from .models import Author, Entry
+
+def update(request):
+    author = Author.objects.get(id=1)
+    author.name = "Agustin"
+    author.email = 'agus@demo.com'
+    author.save()
+    return HttpResponse("El elemento a sido actualizado")
+```
+
+Como vemos creamos un objeto con el método de consulta `.get(id=1)`, y sobre el objeto hacemos las modificaciones de sus atributos.
+
+![base cambiada](./img/modificacion_bd.png)
+
+### Relaciones uno a uno

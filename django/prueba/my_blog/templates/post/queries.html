@@ -7,6 +7,19 @@
     <title>Document</title>
 </head>
 <body>
+    <h3>Obtenemos los datos que su id es menor o igual que 15</h3>
+    <ul>
+        {% for filtered in filtereds %}
+        <li>{{filtered}}</li>
+        {% endfor %}
+    </ul>
+    <h3>Obetenemos todos los autores ordenados por su email</h3>
+    <ul>
+        {% for order in orders %}
+        <li>{{order.email}}</li>
+        {% endfor %}
+    </ul>
+
     <h3>Obteniendo los elementos del 5 al 10 (offsets)</h3>
     <ul>
         {% for offset in offsets %}
