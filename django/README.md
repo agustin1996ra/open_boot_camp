@@ -1705,4 +1705,70 @@ Para trabajar en esta sección y las siguientes donde abordaremos conceptos de m
 
 Para ejemplificar esta relación, vamos a realizar un modelo de datos donde se relacionaran lugares o ubicaciones con restaurantes. Siendo que en una ubicación solo puede haber un restaurante, y un restaurante solo puede estar en un solo lugar.
 
+#### Creación del modelo de datos
+
+Como podemos ver en la segunda clase `Restaurant`, el campo `place` tiene una relación uno a uno con la clase `Place`. Este campo tiene una configuración `on_delete` de tipo `models.CASCADE` lo que significara que en el caso de que se elimine un registro de la clase `Place` se eliminara el registro que tiene relacionado en la clase `Restaurant`. Y también se explicita que `Place` es su clave foránea.
+
+Y en el método string vemos que la clase `Restaurant`, puede invocar a un dato de la clase `Place`. Esto quiere decir que a la hora de crear una clase que tiene una relación con otra, puede pedir los datos de la otra, a traves de la relación.
+
+```python
+from django.db import models
+
+class Place(models.Model):
+    name = models.CharField(max_length=50)
+    address = models.CharField(max_length=80)
+
+    def __str__(self):
+        return self.name
+    
+
+class Restaurant(models.Model):
+    place = models.OneToOneField(Place, on_delete=models.CASCADE, primary_key=True)
+    number_of_employees = models.IntegerField(default=1)
+
+    def __str__(self):
+        return self.place.name
+```
+
+#### Creamos un registro
+
+Para comprobar el funcionamiento de la relación vamos a crear una vista llamada `create`. Donde vamos a crear un registro de la clase `Place` y otro de la clase `Restaurant`.
+
+```python
+# views.py
+from django.shortcuts import render
+from django.http import HttpResponse
+from .models import Place, Restaurant
+
+def create(request):
+    place = Place(name="Lugar 1", address="Calle Demo")
+    place.save()
+
+    restaurant = Restaurant(place=place, number_of_employees=8)
+    restaurant.save()
+
+    return HttpResponse(restaurant.place.name)
+```
+
+Vemos que para indicarle a Django que el objeto `restaurant` esta relacionado con el objeto `place` que acabamos de crear, le pasamos como argumento para el constructor de la clase, el objeto mismo `place` ya que lo tenemos disponible, también podríamos darle el numero de id del registro `Place` con el que lo deseamos relacionar.
+
+#### Como se ven los registros en la base de datos
+
+En este caso vemos el registro en la tabla `Place`, aquí es todo normal.
+
+![place](./img/onetoone_place.png)
+
+Y aca vemos que en la columna `place_id` de la tabla `Restaurant` vemos que se guarda el valor de id del registro al que esta relacionado, como una clave foránea.
+
+![restaurant](./img/onetoone_restaurant.png)
+
+### Relaciones muchos a uno
+
+En esta clase vamos a ver las relaciones uno a muchos y muchos a uno.
+
+Para ejemplificar una relación uno a muchos, vamos a crear un modelo de periodistas y artículos, un periodista puede tener relación a muchos artículos y un articulo puede tener relación a un solo periodista.
+
+En el proyecto `relations` vamos a crear una aplicación `manytoone`.
+
+> A tener en cuenta, la clase que tendrá la clave foránea es la que tiene relación solo con un registro de la otra clase. En este caso la tendrá el articulo, ya que solo puede tener un periodista relacionado.
 
