@@ -1772,3 +1772,88 @@ En el proyecto `relations` vamos a crear una aplicación `manytoone`.
 
 > A tener en cuenta, la clase que tendrá la clave foránea es la que tiene relación solo con un registro de la otra clase. En este caso la tendrá el articulo, ya que solo puede tener un periodista relacionado.
 
+En la modelación para indicar la relación uno a muchos, vamos a usar un campo que sera de tipo `models.ForeignKey`, en este caso sera un campo en la clase `Article` llamado `reporter`, y este contendrá el id del reportero al que pertenece el articulo.
+
+```python
+# models.py
+from django.db import models
+
+class Reporter(models.Model):
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.email
+    
+
+class Article(models.Model):
+    headline = models.CharField(max_length=100)
+    pub_date = models.DateField()
+    reporter = models.ForeignKey(Reporter, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.headline
+
+```
+
+En el caso de hacer consultas, las relaciones igual que las uno a uno, nos permiten llamar a los registros asociados de la otra clase vamos a ver como se puede hacer esto.
+
+```python
+# views.py
+from django.shortcuts import render
+from django.http import HttpResponse
+from .models import Reporter, Article
+from datetime import date
+
+def create(request):
+    rep = Reporter(first_name='Agus', last_name='Rodriguez', email='agusrodriguez@demo.net')
+    rep.save()
+
+    art1 = Article(headline='El que sea', pub_date=date(2022,5,5), reporter=rep)
+    art1.save()
+    art2 = Article(headline='Hola que tal', pub_date=date(2022,6,5), reporter=rep)
+    art2.save()
+    art3 = Article(headline='Como estas?', pub_date=date(2022,7,5), reporter=rep)
+    art3.save()
+
+    # query = art1.reporter.first_name
+    query = rep.article_set.all()
+    # query = rep.article_set.filter(id=2)
+    # query = rep.article_set.count()
+
+    return HttpResponse(query)
+```
+
+Vemos que para hacer una consulta del nombre del reportero, desde un articulo es la misma sintaxis que vimos en las relaciones uno a uno. Pero para hacer la consulta de los artículos relacionados a un reportero, debemos usar otra sintaxis. Especificaremos la clase `article` o cualquiera sea la clase relacionada y continuadamente le pondremos `_set`. De ahi en mas se comportara como una consulta normal, osea que podremos usar los métodos de consulta que vimos en las secciones de consulta de datos 1 y 2. También podremos pintar los datos en una plantilla e iterar con ellos.
+
+### Relaciones muchos a muchos
+
+En el caso de las relaciones muchos a muchos, se crea una tercera tabla donde se escriben las relaciones, es por eso que no es necesario especificar un comportamiento en caso de borrado `on_delete`.
+
+```python
+# models.py
+from django.db import models
+
+class Publication(models.Model):
+    title = models.CharField(max_length=30)
+
+    def __str__(self):
+        self.title
+
+class Article(models.Model):
+    headline = models.CharField(max_length=100)
+    publication = models.ManyToManyField(Publication)
+
+    def __str__(self):
+        return self.headline
+```
+
+Ahora vamos a crear una vista para probar nuestro modelo.
+
+En este caso vamos a trabajar de forma diferente al crear los registros en la base de datos, ya que crearemos los objetos por separados, y luego una vez creados, declararemos que relaciones tienen entre ellos.
+
+> Es muy importante que antes de intentar relacionar los datos estos estén guardados, esto se entiende revisando las tablas de la base de datos. Ya que veremos que para poder relacionar los registros es necesario contar con los id de ambos o todos los registros a relacionar.
+
+
+
