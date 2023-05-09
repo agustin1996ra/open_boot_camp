@@ -1855,5 +1855,10 @@ En este caso vamos a trabajar de forma diferente al crear los registros en la ba
 
 > Es muy importante que antes de intentar relacionar los datos estos estén guardados, esto se entiende revisando las tablas de la base de datos. Ya que veremos que para poder relacionar los registros es necesario contar con los id de ambos o todos los registros a relacionar.
 
+En el caso que deseáramos quitar una relación debemos usar el comando `remove` para eliminar una relación.
 
+```python
+art1.publication.remove(pub1)
+```
 
+Esto eliminara el registro de la relación de la tabla.

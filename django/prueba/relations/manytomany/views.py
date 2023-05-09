@@ -48,5 +48,5 @@ def delete(request):
 
 def consulta(request):
     pub1 = Publication.objects.get(id=70)
-    con = pub1.article_set.all()
+    con = pub1.article_set.all() # type: ignore
     return HttpResponse(con)

@@ -15,7 +15,7 @@ def create(request):
     art3.save()
 
     # query = art1.reporter.first_name
-    query = rep.article_set.all()
+    query = rep.article_set.all() # type: ignore
     # query = rep.article_set.filter(id=2)
     # query = rep.article_set.count()
 
