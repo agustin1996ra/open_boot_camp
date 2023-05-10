@@ -1862,3 +1862,84 @@ art1.publication.remove(pub1)
 ```
 
 Esto eliminara el registro de la relación de la tabla.
+
+### Conexión PostgreSQL
+
+Hasta ahora hemos estado trabajando con el motor de bases de datos que trae django por defecto. Este es SQLite, que es muy util para la modelación de nuestros datos, sin tener que preocuparnos por la conexión con un servidor de datos.
+
+Pero hay que tener en cuenta que a la hora de poner nuestro proyecto en producción, este tendrá que tener un motor de base de datos, mas potente, y con un servidor especifico para esta tarea. Este también sera necesario en el caso de que empecemos a trabajar con grandes cantidades de datos.
+
+En este caso aprenderemos a configurar una de la alternativas a motores de base de datos. Este se llama PostgreSQL, este es el que django nos recomienda para desarrollar nuestros proyectos.
+
+#### Como configuro un motor de base de datos?
+
+Para ello debemos ir a el archivo `settings.py`, en la parte de `DATABASES`, estarán las variables de configuración de los motores de bases de datos. Se nos recomienda seguir el link a la documentación de bases de datos, para ver como es que se configura esta sección correctamente.
+
+```python
+# Database
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+```
+
+En el caso de querer usar otro tipo de motor de bases de datos, vamos a tener que aportar algunos parámetros mas que en el caso de `SQLite3`. Aquí va un ejemplo de los parámetros que debemos aportar.
+
+```python
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "mydatabase",
+        "USER": "mydatabaseuser",
+        "PASSWORD": "mypassword",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
+    }
+}
+```
+
+Algunos de los otros motores de base de datos soportados por django, son MySQL y Oracle, siendo SQLite3 por defecto cuando se crea el proyecto y PostgreSQL el recomendado por Django para producción.
+
+#### Creamos y conectamos una base de datos
+
+Entramos a PgAdmin, y creamos una base de datos llamado `django_sample`. Luego creamos un proyecto de django llamado `postgresql_project`.
+
+Entramos en el archivo `settings.py` de nuestro nuevo proyecto, y teniendo en cuenta la estructura que tendrán nuestras variables de configuración, las cuales podemos consultar en la documentación, completaremos los parámetros para conectarnos con nuestra nueva base de datos.
+
+En mi caso esta sera la configuración de los parámetros.
+
+```python
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "django_sample",
+        "USER": "postgres",
+        "PASSWORD": "admin",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
+    }
+}
+```
+
+Luego entramos a nuestro proyecto desde la consola, y haremos el migrate inicial del proyecto, si todas nuestras configuraciones son correctas, se realizaran las migraciones sin inconvenientes.
+
+Ahora podremos notar que en nuestra carpeta de proyecto no se ha creado una archivo de base de datos, todas nuestras migraciones se realizaron dentro de la base de datos que creamos en PgAdmin.
+
+Si entramos a PgAdmin, podremos ver que el dentro los Schemas > Tables, veremos las mismas tablas que antes se creaban en SQLite3.
+
+![postgresql](./img/postgresql.png)
+
+### Práctica: Diseño del modelo de datos
+
+Supongamos que somos un desarrollador backend, estamos trabajando para un compañía internacional y tenemos que desarrollar un software de gestión, y tenemos que desarrollar en django.
+
+La plataforma de gestión debe tener un control de los empleados(nombre, apellido, dni, email, dirección, puesto de trabajo, dirección del puesto de trabajo), el puesto donde trabaja va tener asociado una descripción y un salario(uno o diferentes puestos de trabajo, si cuentan o no con aguinaldos verano e invierno), Las ubicaciones de los puesto de trabajos/fabricas(dirección, nombre, código postal, población a la que pertenecen / ciudad, país).
+
+Crearemos un diagrama de la estructura de base de datos, primero en solitario y luego lo compararemos con la planificación del docente.
+
+> El profesor va usar visual Paradigm para desarrollar un modelo de datos de manera visual.
+
