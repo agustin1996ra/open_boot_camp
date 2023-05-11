@@ -1943,3 +1943,77 @@ Crearemos un diagrama de la estructura de base de datos, primero en solitario y 
 
 > El profesor va usar visual Paradigm para desarrollar un modelo de datos de manera visual.
 
+![diseño de modelo](./img/dise%C3%B1o%20de%20modelo.png)
+
+### Práctica: codificación del modelo de datos
+
+```python
+from django.db import models
+
+
+class Salary(models.Model):
+    amount =  models.IntegerField(null=False, blank=False)
+    extra_dec = models.BooleanField(default=False)
+    extra_jun = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.amount
+
+
+class Job(models.Model):
+    title = models.CharField(max_length=15, blank=False, null=False)
+    description = models.TextField(null=True)
+    salary = models.ForeignKey(Salary, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+
+
+class Country(models.Model):
+    name = models.CharField(max_length=30, null=False, blank=False)
+    country_code = models.CharField(max_length=5, null=False, blank=False)
+
+    def __str__(self):
+        return self.name
+
+
+class Region(models.Model):
+    name = models.CharField(max_length=30, blank=False, null=False)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class Location(models.Model):
+    name = models.CharField(max_length=30, blank=False, null=False)
+    zip_code = models.CharField(max_length=5, null=False, blank=False)
+    region = models.ForeignKey(Region, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    
+class Place(models.Model):
+    name = models.CharField(max_length=30, null=False, blank=False)
+    address = models.CharField(max_length=50, null=False, blank=False)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.name    
+
+    
+class Employee(models.Model):
+    id_number = models.CharField(max_length=30, blank=False, null=False)
+    name = models.CharField(max_length=30, blank=False, null=False)
+    last_name = models.CharField(max_length=30, blank=False, null=False)
+    email = models.EmailField(max_length=30, blank=False, null=False)
+    address = models.CharField(max_length=50, blank=False, null=False)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    place = models.ForeignKey(Place, on_delete=models.CASCADE)    
+    
+    def __str__(self):
+        return self.name
+```
+
+> Tener en cuenta que debemos ir declarando las clases de manera descendente en por su relación en de las claves foraneas, lo que quiere decir que la clase `Employee` va ser necesariamente declarado ultimo, ya que necesita tener declarado antes que ella la clase `Place` y la clase `Job`.
