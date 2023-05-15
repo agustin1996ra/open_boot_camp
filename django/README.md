@@ -2017,3 +2017,105 @@ class Employee(models.Model):
 ```
 
 > Tener en cuenta que debemos ir declarando las clases de manera descendente en por su relación en de las claves foraneas, lo que quiere decir que la clase `Employee` va ser necesariamente declarado ultimo, ya que necesita tener declarado antes que ella la clase `Place` y la clase `Job`.
+
+## Formularios
+
+En esta sección veremos como el usuario puede enviarnos información, esto son los formularios.
+
+En el caso de los formularios tendremos que también respetar, la modularizacion, para que produzcamos código fácil de mantener.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>FORM</h1>
+    <hr>
+    {% include 'forms/contact.html' %}
+</body>
+</html>
+```
+
+### Formularios HTML GET
+
+A la hora de hacer un formulario, siempre debemos entregar la información de la pagina de acción y el verbo con el que vamos a comunicar la información.
+
+`GET` nunca sera recomendable para enviar información sensible, ya que esta información viajara sin cifrar desde el usuario al servidor.
+
+`POST` es un método que enviara la información de forma segura, ya que ésta viajara cifrada.
+
+A la hora de especificar donde serán enviados los datos del formulario, lo haremos desde la configuración `action=` de la etiqueta `<form>`. En esta le daremos una url, que para hacerlo de forma correcta, tendremos que insertar unas llaves de django URL `{% url 'goal' %}`, donde apuntaremos a una dirección descrita en nuestro archivo `urls.py`, que después ésta apuntara a una vista. Donde estarán descritas las acciones a realizar con la información, ya sea utilizarlas para un algoritmo que devuelve una respuesta, o almacenarlas en un base de datos.
+
+```html
+<form action="{% url 'goal' %}" method="GET">
+    <h3>Fromulario de contacto</h3>
+    <label>Nombre: </label>
+    <input type="text" name="name" placeholder="Escribe tu nombre...">
+    <label>Comentario: </label>
+    <input type="text" name="message" placeholder="Escribe tu comentario...">
+    <input type="submit" value="Enviar">
+</form>
+```
+
+Ahora veremos como se puede consumir los datos que vienen a traves del metodo `GET` a la request de la vista `goal`.
+
+```python
+from django.shortcuts import render
+from django.http import HttpResponse
+
+def form(request):
+    return render(request, 'form.html', {})
+
+def goal(request):
+    if request.method != 'GET':
+        return HttpResponse("El método POST no esta soportado para esta ruta")
+    
+    name = request.GET['name']
+    return render(request, 'success.html', {'name': name})
+```
+
+El método `GET` es dentro de la vista tratado como un diccionario, donde utilizaremos la llave que le proporcionamos a dentro del `<input>`, en este caso utilizamos la respuesta a el campo `name`, y se lo damos por contexto a el renderizará de la pagina `success.html`.
+
+```html
+<!-- success.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Gracias por la información, {{name}}</h1>
+</body>
+</html>
+```
+
+Hay que tener en cuenta que al utilizar el método `GET`, la información proporcionada en el formulario, viajara visible. El ejemplo de recién asi es como se vera la ruta de hacia `goal`: `http://127.0.0.1:8000/goal/?name=Agus&message=Esto+es+un+comentario`. Es por eso que debemos ser muy consientes de que tipo de información estamos pidiendo dentro de el formulario, y elegir correctamente el método que deberemos usar.
+
+### Formularios HTML POST
+
+En esta sección veremos como es la utilización de formulario con el método `POST`.
+
+Notaremos que la única diferencia que hay entre el caso de los formularios `GET` y los `POST`, es que en estos últimos, deberemos poner en el archivo html, un comando de django `{% csrf_token %}`, esto es necesario para que se cumplan los requerimientos de seguridad a la hora de mandar información por el método `POST`.
+
+Un token CSRF (Cross-Site Request Forgery) es una medida de seguridad que se utiliza para proteger los sitios web contra ataques CSRF. Un ataque CSRF es un tipo de ataque en el que un atacante aprovecha la sesión activa de un usuario en un sitio web para realizar acciones maliciosas sin su conocimiento o consentimiento.
+
+El token CSRF es un valor aleatorio generado por el servidor y se envía al cliente en forma de cookie o en una etiqueta de entrada oculta en un formulario. Cuando se realiza una solicitud al servidor, el token CSRF se incluye en la solicitud y el servidor lo compara con el valor almacenado en la cookie o en la etiqueta de entrada oculta. Si los valores coinciden, la solicitud se considera legítima y se procesa. Si los valores no coinciden, la solicitud se rechaza.
+
+El uso de tokens CSRF es una práctica recomendada para garantizar la seguridad de los sitios web y proteger a los usuarios contra los ataques CSRF.
+
+```html
+<form action="{% url 'postgoal' %}" method="POST">
+    {% csrf_token %}
+    <input type="text", name="info", placeholder="Escribe algo...">
+    <input type="submit" value="Enviar">
+</form>
+```
