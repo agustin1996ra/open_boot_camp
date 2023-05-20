@@ -2119,3 +2119,80 @@ El uso de tokens CSRF es una práctica recomendada para garantizar la seguridad 
     <input type="submit" value="Enviar">
 </form>
 ```
+
+### Formulario a través de clases
+
+En esta sección vemos como podemos crear formularios desde clases built-in de django. Estas clases se describen desde un archivo llamado `forms.py`, la sintaxis de declaración es prácticamente igual a la modelación de bases de datos.
+
+```python
+# forms.py
+from django import forms
+
+class CommentForm(forms.Form):
+    name = forms.CharField(label="Escribe tu nombre", max_length=100, help_text="100 caracteres máximo")
+    url = forms.URLField(label="Tu sitio web", required=False, initial="http://")
+    comment = forms.CharField()
+```
+
+Luego tendremos que importar las clases de `forms.py` dentro de `views.py`, donde inicializaremos una instancia de la clase y le pasaremos a el `html` a traves del contexto. También podremos especificar valores por default, y esto nos muestra que en caso de ofrecer revisar y editar datos almacenados, utilizaremos también esta sintaxis para que junto con el objeto formulario vallan los datos almacenados.
+
+```python
+from django.shortcuts import render
+from django.http import HttpResponse
+from .forms import CommentForm
+
+def form(request):
+    comment_form = CommentForm({'name': 'Agus', 'url': 'https://www.youtube.com', 'comment': 'Comentario por defecto'})
+    return render(request, 'form.html', {"comment_form": comment_form})
+
+def goal(request):
+    if request.method != "POST":
+        return HttpResponse('Método no soportado por esta ruta')
+
+    return HttpResponse(request.POST["name"])
+
+```
+
+Describimos las direcciones para la vista del formulario y para la recepción de los datos.
+
+```python
+from django.contrib import admin
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('form/', views.form, name="form"),
+    path('goal/', views.goal, name="goal")
+]
+```
+
+En este caso también debemos indicar la acción (url destino de los datos) y el verbo del método, y en el caso de utilizar el método `POST` también deberemos agregar el token csrf. También deberemos utilizar la etiqueta `<input>` para el botón de enviar el formulario.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Formulario Django</h1>
+    <hr>
+    
+    <form action="{% url 'goal' %}" method="POST">
+        {% csrf_token %}
+        <table>
+        {{ comment_form.as_p }}
+         <p><input type="submit" value="Enviar"></p>
+        </table>
+    </form>
+    
+</body>
+</html>
+```
+
+### Widget en formularios
+
