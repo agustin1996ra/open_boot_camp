@@ -2196,3 +2196,169 @@ En este caso también debemos indicar la acción (url destino de los datos) y el
 
 ### Widget en formularios
 
+Para este caso de formularios utilizaremos la palabra `widget=` a la hora de definir nuestra clase formulario, este servirá para darle formato a la los distintas entradas de nuestro formulario. Ya que utilizaremos etiquetas css para atribuirle una clase, que podremos darle un estilo o utilizar una clase dada por un archivo bootstrap por ejemplo.
+
+```python
+from django import forms
+
+class CommentForm(forms.Form):
+    name = forms.CharField(label="Escribe tu nombre", max_length=100, help_text="100 caracteres máximo")
+    url = forms.URLField(label="Tu sitio web", required=False, initial="http://")
+    comment = forms.CharField()
+
+class ContactForm(forms.Form):
+    name = forms.CharField(
+        label="Nombre: ",
+        max_length=50,
+        widget=forms.TextInput(attrs={"class": "form-control"}))
+    email = forms.EmailField(
+        label="Email: ",
+        max_length=50,
+        widget=forms.EmailInput(attrs={'class': 'form-control'})
+        )
+    message = forms.CharField(
+        label="Mensaje: ",
+        widget=forms.Textarea(attrs={'class': 'form-control'}))
+
+
+```
+
+```python
+# urls.py
+from django.contrib import admin
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('form/', views.form, name="form"),
+    path('goal/', views.goal, name="goal"),
+    path('widget/', views.widget, name="widget")
+]
+
+```
+
+Luego debemos crear una vista donde creamos el objeto formulario de la clase que acabamos de construir. Y se lo pasaremos por contexto a la template.
+
+```python
+# views.py
+from django.shortcuts import render
+from django.http import HttpResponse
+from .forms import CommentForm, ContactForm
+
+def form(request):
+    comment_form = CommentForm({'name': 'Agus', 'url': 'https://www.youtube.com', 'comment': 'Comentario por defecto'})
+    return render(request, 'form.html', {"comment_form": comment_form})
+
+def goal(request):
+    if request.method != "POST":
+        return HttpResponse('Método no soportado por esta ruta')
+
+    return HttpResponse(request.POST["name"])
+
+def widget(request):
+    form = ContactForm()
+    return render(request, 'widget.html', {'form': form})
+
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+    <h1>Formulario Django</h1>
+    <hr>
+    <div style="display: flex; justify-content: center; aling-items: center; border: 1px solid #ccc; border-radius: 10px; with: 420px; padding: 20px; margin: 20px;">
+        <form action="{% url 'widget' %}" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Enviar">
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+</body>
+</html>
+```
+
+En este caso no es necesaria la vista y la url para recepcionar los datos, ya que la misma se encargara de las dos, un método get enviara el formulario a traves del contexto y un método post nos devolverá los datos una vez enviados.
+
+### Validación de formularios
+
+La validación de formularios sirve para comprobar que la información introducida por el usuario es correcta.
+
+Dentro de django tenemos a disposición varias validaciones estandarizadas, las cuales están incorporadas en el uso de las clases heredadas de `forms`, como por ejemplo el caso de el campo `email`, vimos que podríamos usar una clase llamada `EmailInput`. Esta clase se va encargar de validar que la cadena de caracteres ingresada por el usuario se valida para una casilla de email.
+
+También tenemos las validaciones personalizadas, por que necesitamos validar un formato de dato no soportado por django, ya sea completamente no soportado o parcialmente.
+
+Por ejemplo podríamos querer comprobar que el email que nos ingresen los usuarios sea una dirección de email corporativo de la empresa, entonces para eso deberíamos chequear que tiene el formato correspondiente.
+
+> Django hace doble validación, ya que valida en el cliente y en el servidor
+
+#### Validación personalizadas
+
+Estas validaciones personalizadas las vamos a hacer a traves de las funciones `clean_` en la clase del formulario.
+
+En el siguiente ejemplo se ve como agregamos validaciones personalizadas para el campo `name`, definiendo una función llamada `clean_` seguida por el nombre del campo, en este caso la función será `clean_name`
+
+```python
+# forms.py
+from django import forms
+
+class ContactForm(forms.Form):
+    name = forms.CharField(
+        label="Nombre: ",
+        max_length=50,
+        widget=forms.TextInput(attrs={"class": "form-control"}))
+    email = forms.EmailField(
+        label="Email: ",
+        max_length=50,
+        widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    message = forms.CharField(
+        label="Mensaje: ",
+        widget=forms.Textarea(attrs={'class': 'form-control'}))
+    
+    def clean_name(self):
+        name = self.cleaned_data.get("name")  # De esta forma tomamos las validaciones anteriores del campo
+        if name != "Open":  # Y agregamos las validaciones personalizadas
+            raise forms.ValidationError("Solo el valor Open esta permitido")  # elevara el error
+        else:
+            return name
+```
+
+Ahora lo que nos queda es mostrar en la plantilla los errores al usuario para que pueda cambiarlos teniendo el por que de los errores.
+
+Para ello vamos a especificarlo en el caso de error en el archivo de las views.
+
+```python
+# views.py
+from django.shortcuts import render
+from django.http import HttpResponse
+from .forms import CommentForm, ContactForm
+
+def widget(request):
+    if request.method == 'GET':
+        form = ContactForm()
+        return render(request, 'widget.html', {'form': form})
+    
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Aquí irán todas las acciones a realizar cuando los datos son correctos
+            return HttpResponse("Válido")
+        else:
+            # Aquí comunicamos al usuario que los datos no son válidos
+            return render(request, 'widget.html', {'form': form})
+        
+```
+
+### Formularios a partir de modelos
+
+En el uso de formularios es muy interesante, que este este vinculado con nuestro un modelo de dato, y que desde el formulario el usuario pueda crear registros en el modelo, actualizar valores o quitarlos y eliminar registros.
+
