@@ -1,6 +1,7 @@
 # Curso de Java básico
 
-## Comentarios y documentación
+## Conceptos
+### Comentarios y documentación
 Ahora veremos un ejemplo de varios tipos de cometarios y documentación
 
 ```java
@@ -36,7 +37,7 @@ public class Main {
 }
 ```
 
-## Variables y tipos de datos
+### Variables y tipos de datos
 ```java
 package com.company;
 
@@ -83,7 +84,7 @@ public class Tipos {
 }
 ```
 
-## Operadores
+### Operadores
 
 ```java
 package con.company
@@ -142,7 +143,7 @@ public class Operadores {
 }
 ```
 
-## Palabras reservadas
+### Palabras reservadas
 Java Language Keywords
 
 Esta es la lista de palabras reservadas en Java. No se puede usar ninguna de estas como identificadores en un programa. Las palabras `const` y `goto` estan reservadas, aunque altualmente no se usan. `true`, `false` y `null` pueden parecer palabras, pero en realidad son literales, tampoco se pueden usar como identificadores en un programa.
@@ -203,7 +204,7 @@ Esta es la lista de palabras reservadas en Java. No se puede usar ninguna de est
 ***   added in 1.4
 ****  added in 5.0
 
-## Funciones y parametros
+### Funciones y parametros
 ```java
 package con.company;
 
@@ -225,7 +226,7 @@ public class Funciones {
 }
 ```
 
-## Sobrecarga de métodos
+### Sobrecarga de funciones
 Una función se dice que está sobrecargada cuando el nombre de función es utilizado 
 en más de una implementación
 ```java
@@ -270,4 +271,6 @@ la configuración de los parámetros de entrada.
 
 Ósea, si uno invoca a la función `holaMundo(3);`, estará llamado a la tercera implementación de
 la función, lo cual devolverá como resultado, `"El número es: 3"`.
+
+### Crear clases
 
