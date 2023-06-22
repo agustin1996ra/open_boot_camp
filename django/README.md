@@ -2360,5 +2360,223 @@ def widget(request):
 
 ### Formularios a partir de modelos
 
-En el uso de formularios es muy interesante, que este este vinculado con nuestro un modelo de dato, y que desde el formulario el usuario pueda crear registros en el modelo, actualizar valores o quitarlos y eliminar registros.
+En el uso de formularios es muy interesante, que este este vinculado con nuestro un modelo de dato, y que desde el formulario el usuario pueda crear registros en el modelo, actualizar valores o quitarlos y eliminar registros. Osea operaciones crud.
+
+Para poder hacer formularios a partir de modelos, lo primero que haremos es crear un modelo. Para este caso vamos crear un proyecto nuevo con un aplicación llamada `employees`, donde crearemos un modelo llamado `Employee`.
+
+```python
+from django.db import models
+
+class Employee(models.Model):
+    name = models.CharField(max_length=50, blank=False, null=False)
+    last_name = models.CharField(max_length=50, blank=False, null=False)
+    email = models.EmailField(max_length=50, blank=False, null=False)
+
+    def __str__(self):
+        return self.name
+        
+```
+
+Luego desde un archivo `forms.py` vamos a llamar a nuestro modelo. Y crearemos un formulario, que dentro de la subclase meta, va a indicar cual modelo y cuales campos va a utilizar. Pudiendo indicar los campos agregándolos dentro de una lista `fields = ['name', 'last_name', 'email']`. O si deseamos todos los campos del modelo podemos usar `fields =  '__all__'`. Y si deseamos todos menos uno o casi todos podemos usar `exclude = ('email',)`.
+
+```python
+from django.forms import ModelForm
+from .models import Employee
+
+class EmployeeForm(ModelForm):
+    class Meta:
+        model = Employee
+        fields = '__all__'
+
+```
+
+Y después podremos incluir este formulario en nuestras plantillas de la misma manera que trabajamos con los anteriores.
+
+### Práctica formularios
+
+Vamos a realizar un proyecto para poner en practica los conceptos de este capitulo, este  también sera utilizado para ver los conceptos de proximo tema, que serán los tableros de administrador.
+
+El proyecto sera un e-commerce que deberá tener una aplicación, que mediante un modelo gestione el stock de los productos.
+
+```python
+# models.py
+from django.db import models
+
+class Product(models.Model):
+    name = models.CharField(max_length=50, blank=False, null=False)
+    short_description = models.CharField(max_length=100, blank=False, null=False)
+    description = models.TextField(blank=False, null=False)
+    stock = models.IntegerField(default=20)
+
+    def __str__(self):
+        return self.name
+    
+```
+
+Luego se utilizara estaclase modelo desde un form, para heredar las configuraciones del campo y ofrecer una ventana donde se puedan cargar los datos mediante un formulario.
+
+```python
+# forms.py
+from django.forms import ModelForm
+from .models import Product
+
+class ProductForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+```
+
+Con una instancia de este formulario creamos un objeto en la view, para dárselo por contexto a la plantilla. Y y generamos una condicional de validación antes de guardar los datos ingresados en la base de datos.
+
+```python
+# views.py
+
+from django.shortcuts import render
+from .forms import ProductForm
+
+def index(request):
+    if request.method == "POST":  # recepción de los datos del formulario
+        form = ProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'index.html', {'form': form})
+
+    else:  # primer ingreso a la url
+        form = ProductForm()
+        return render(request, 'index.html', {'form': form})
+
+```
+
+Y luego lo mostramos en la plantilla, con un formato simple como párrafo.
+
+```html
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>Añadir producto</h3>
+    <hr>
+    <form action="{% url 'index' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Crear Producto">
+    </form>
+</body>
+</html>
+```
+
+## Panel de administración
+
+### Administración de grupos y usuarios
+
+El comando para crear super usuarios es `python3 manage.py createsuperuser`, luego tendremos que ingresar su nombre, email y contraseña.
+
+El panel de administración por defecto nos dará acceso a la edición de grupos que comparten permisos, creación de usuarios y permisos especiales para ciertos usuarios.
+
+En la proxima clase veremos como ir integrando dentro del tablero de administración las funcionalidades de que nosotros le hemos ido añadiendo al proyecto. Por ejemplo seria interesante que podamos agregar un vinculación a la gestión de stock que hicimos la clase anterior.
+
+### Registrar los modelos en el panel de administración
+
+A la hora de poner en producción nuestro proyecto es muy importante que los usuarios administradores puedan ir solventando las necesidades del proyecto, y mejor si esto pueden hacerlo desde una interfaz gráfica, por ello es muy util el registrar nuestros modelos en el panel de administración.
+
+Para poder registrar nuestros modelos y que este disponibles, debemos importar los modelos en el archivo `admin.py` de nuestras aplicaciones, y luego con llamando al método `admin.site.register()` y dando le como argumento el modelo.
+
+```python
+# admin.py
+from django.contrib import admin
+from .models import Product
+
+admin.site.register(Product)
+```
+
+Listo ya figurara en nuestro panel de administración, para aquellos usuarios que cuenten con privilegios sobre ese modelo.
+
+![panel de administración](./img/panel%20de%20administraci%C3%B3n.png)
+
+### Uso del ModelAdmin
+
+AHora veremos como incorporar mas funcionalidades e información a nuestro panel de administración, para ello vamos a utilizar el archivo `admin.py`.
+
+Heredaremos de la clase `admin.ModelAdmin`, y vamos a crear una clase con el nombre de nuestro modelo seguido por la palabra `Admin`.
+
+Lo primero que haremos en esta clase será agregar los campos adicionales que deseemos que muestren los registros en el panel. Utilizando el atributo `list_display`, en esta lista pasaremos los nombres de las columnas del modelo. Y también le pasaremos la clase que acabamos de definir como atributo al método `admin.site.register()`.
+
+```python
+# admin.py
+from django.contrib import admin
+from .models import Product
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ("name", "short_description", "stock",)
+
+admin.site.register(Product, ProductAdmin)
+
+```
+
+Otra de las características que podemos añadir a nuestro panel, es la posibilidad de hacer búsquedas, indicando cuales columnas entraran dentro de los datos a buscar.
+
+```python
+# admin.py
+from django.contrib import admin
+from .models import Product
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ("name", "short_description", "stock",)
+    search_fields = ("name", "short_description",)
+
+admin.site.register(Product, ProductAdmin)
+
+```
+
+También podremos agregar la posibilidad de nuestros registros filtrarlos por ciertos campos, esto se hace dando le los nombres de los campos a el atributo `list_filter`.
+
+```python
+# admin.py
+from django.contrib import admin
+from .models import Product
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ("name", "short_description", "stock",)
+    search_fields = ("name", "short_description",)
+    list_filter = ("name",)
+
+admin.site.register(Product, ProductAdmin)
+
+```
+
+Otro filtro interesante es generar un jerarquía por fechas, donde nuestros registros pueden ser navegados según cierta fecha. Utilizaremos para ello el atributo `date_hierarchy`.
+
+```python
+# admin.py
+from django.contrib import admin
+from .models import Product
+
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ("name", "short_description", "stock",)
+    search_fields = ("name", "short_description",)
+    list_filter = ("name",)
+    date_hierarchy = "discount_until"
+
+admin.site.register(Product, ProductAdmin)
+
+```
+
+## Practica CRUD - Desarrollo gestor personal
+
+### Práctica: Enunciado y escritura
+
+#### Enunciado
+
+EL proyecto que vamos a desarrollar sera un gestor personal, el cual tendrá como características y funciones:
+
+- Agenda de contactos: operaciones crud y función búsqueda
+- Organización de tareas: una aplicación que le permita al usuario registrar tareas (crud)
+
+> Siempre que empecemos con un nuevo proyecto, debemos empezar definiendo las características de nuestro proyecto y la arquitectura y las implementaciones y pasos que vamos a tomar a la hora de desarrollarlo. Esto es una etapa fundamental para que en el futuro tengamos una hoja de ruta clara.
 

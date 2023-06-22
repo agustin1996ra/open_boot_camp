@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h3>Añadir producto</h3>
+    <hr>
+    <form action="{% url 'index' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Crear Producto">
+    </form>
+    <div style="overflow:hidden;width: 700px;position: relative;">
+        <iframe width="700" height="440" src="https://maps.google.com/maps?width=700&amp;height=440&amp;hl=en&amp;q=San%20Rafael%2C%20Mendoza%2C%20Argentina+(matecoders)&amp;ie=UTF8&amp;t=&amp;z=10&amp;iwloc=B&amp;output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><div style="position: absolute;width: 80%;bottom: 10px;left: 0;right: 0;margin-left: auto;margin-right: auto;color: #000;text-align: center;"><small style="line-height: 1.8;font-size: 2px;background: #fff;">Powered by <a href="https://embedgooglemaps.com/it/">https://embedgooglemaps.com/it/</a> & <a href="https://playoldgames.org/custers-revenge-a26">https://playoldgames.org/custers-revenge-a26</a></small></div><style>#gmap_canvas img{max-width:none!important;background:none!important}</style>
+    </div><br/>
+</body>
+</html>
