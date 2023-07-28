@@ -274,3 +274,10 @@ la función, lo cual devolverá como resultado, `"El número es: 3"`.
 
 ### Crear clases
 
+Vamos a ver como crear clase del paradigma de programacion orientada a objetos.
+
+Las partes principales de la estructura de una clase son, los atributos,
+los constructores, los métodos de comportamiento y los setters y getters.
+
+
+
