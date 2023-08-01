@@ -243,3 +243,11 @@ Date:   Thu Jul 20 18:52:56 2023 -0300
 ### Otra forma de iniciar un repositorio
 
 Podemos crear un repositorio también con el siguiente comando `git init --bare aplicacion`, en el cual indicamos el nombre de la carpeta de repositorio al final. Este comando lo que quiere decir es que crearemos un repositorio en un lugar, pero trabajaremos en otro lado. Osea el registro de cambios se guardara en otro lugar de donde tenemos nuestros archivos. PAra usar este repositorio una vez creado tengo que usar un `git clone` y la dirección de el repositorio "remoto".
+
+## Git Sesión 4
+
+- `git bisect`: Este comando se utiliza empezando con un `git bisect start`, luego se le pasa el ultimo commit "bueno" donde nuestro proyecto funcionaba con el comando `git bisect good <hash>`. Y después le pasaremos el hash del commit donde dejo de funcionar con el comando `git bisect bad <hash>`.
+
+- `git blame <ruta archivo>` nos permite ver que usuarios y cuando alteraron un archivo
+
+- 
