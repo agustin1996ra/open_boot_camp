@@ -7,13 +7,13 @@
 Configurar Nombre que salen en los commits
 
 ```bash
-git config --global user.name "dasdo"
+git config --global user.name "agustin1996ra"
 ```
 
 Configurar Email
 
 ```bash
-git config --global user.email dasdo1@gmail.com
+git config --global user.email 63318331+agustin1996ra@users.noreply.github.com
 ```
 
 Marco de colores para los comando
@@ -137,7 +137,7 @@ git commit --amend -m "Texto que identifique por que se hizo el commit"
 Subimos al repositorio
 
 ```bash
-git push <origien> <branch>
+git push <origen> <branch>
 ```
 
 Subimos un tag
@@ -160,7 +160,7 @@ Muestras los cambios en los commits
 git log --oneline --stat
 ```
 
-Muestra graficos de los commits
+Muestra gráficos de los commits
 
 ```bash
 git log --oneline --graph
@@ -283,7 +283,7 @@ git tag
 Crea un nuevo tags
 
 ```bash
-git tag -a <verison> - m "esta es la versión x"
+git tag -a <version> - m "esta es la versión x"
 ```
 
 ### GIT REBASE
@@ -313,7 +313,7 @@ git rebase --skip
 Devuelve todo al principio del rebase
 
 ```bash
-git reabse --abort
+git rebase --abort
 ```
 
 Para hacer un rebase a un branch en especifico
@@ -462,7 +462,7 @@ drwxr-xr-x 1 rodri 197609   0 jul. 12 18:31 ./
 drwxr-xr-x 1 rodri 197609   0 jul. 12 18:31 objects/
 ```
 
-Si usamos el comando `find .` también veremos las sub carpetas y todos los archivos. Si prestamos atencion a la carpeta objects, veremos hashes donde se guardar nuestro codigo fuente, de igual manera no podremos leer ni entender estos archivos, ya que estan comprimidos.
+Si usamos el comando `find .` también veremos las sub carpetas y todos los archivos. Si prestamos atención a la carpeta objects, veremos hashes donde se guardar nuestro código fuente, de igual manera no podremos leer ni entender estos archivos, ya que están comprimidos.
 
 ```bash
 rodri@laptop-agus MINGW64 /c/rep/practica_git_obc/.git (GIT_DIR!)
@@ -517,7 +517,7 @@ $ find .
 
 ### Servicios de repositorios remotos
 
-A la hora de queres trabajar en equipo y compartir nuestro codigo, siempre podriamos compartir un archivo comprimido de nuestro repositorio, pero esto es bastante ineficiente. Lo mejor que podemos hacer es trabajar con un servidor. Tenemos la posibilidad de crear nuestro propio repositorio o de utilizar uno de los servidores de empresas dedicadas a esto.
+A la hora de querer trabajar en equipo y compartir nuestro código, siempre podríamos compartir un archivo comprimido de nuestro repositorio, pero esto es bastante ineficiente. Lo mejor que podemos hacer es trabajar con un servidor. Tenemos la posibilidad de crear nuestro propio repositorio o de utilizar uno de los servidores de empresas dedicadas a esto.
 
 Esta empresas que proveen servidores para nuestros repositorios son:
 
@@ -549,7 +549,7 @@ Esto lo haremos con gitea. Primer requisito para usar gitea es tener instalado D
 
 Para buscar el instalador de gitea, vamos a recurrir a DockerFile, que es una pagina, donde se suben las imágenes de varios sistemas, ya personalizados, para diferentes tareas.
 
-Para crear un conteiner de gitea escribiremos un archivo `docker-compose.yml`, dentro de una carpeta llamada gitea. Luego ejecutaremos el comando `docker-compose up`.
+Para crear un container de gitea escribiremos un archivo `docker-compose.yml`, dentro de una carpeta llamada gitea. Luego ejecutaremos el comando `docker-compose up`.
 
 ```yml
 version: "3"
@@ -566,7 +566,7 @@ services:
       - USER_UID=1000
       - USER_GID=1000
     restart: always
-    nerworks:
+    networks:
       - gitea
     volumes:
       - ./gitea:/data
@@ -583,7 +583,7 @@ En esta clase, vamos a trabajar en un repositorio local.
 
 Vamos a crear una carpeta llamada `miapp`, y vamos a agregar archivos y ficheros como si fuesen las partes de un proyecto.
 
-Con el comando `git init` dentro de la carpeta `miapp` vamos a transformar esta carpeta en un repositorio git. Luego vamos a almacenar los cambios en el `staging area`, ahora estos cambios no estan confirmados. Para confirmarlos en el repositorio debemos usar el comando `git commit`.
+Con el comando `git init` dentro de la carpeta `miapp` vamos a transformar esta carpeta en un repositorio git. Luego vamos a almacenar los cambios en el `staging area`, ahora estos cambios no están confirmados. Para confirmarlos en el repositorio debemos usar el comando `git commit`.
 Antes de confirmarlo vamos a hacer una configuraciones en el repositorio.
 
 ### Configuraciones de git
@@ -595,7 +595,7 @@ Para hacer cambios en estas tres vamos a usar el comando `git config` seguido po
     - `git config --global`
     - `git config --local`
 
-A tener en cuenta que la jerarquía de las configuraciones esta dada por cual esta mas cerca del repositorio, por ejemplo las configuraciones globales sobreescriben las de sistema, como las configuraciones locales del repositorio sobreescriben las configuraciones globales del usuario.
+A tener en cuenta que la jerarquía de las configuraciones esta dada por cual esta mas cerca del repositorio, por ejemplo las configuraciones globales sobrescriben las de sistema, como las configuraciones locales del repositorio sobrescriben las configuraciones globales del usuario.
 
 Para poder ver la configuración actual, podemos usar el comando `git config --list` seguido del nivel que deseamos ver de configuración ya sea `--system`, `--global` o `--local`.
 
@@ -611,7 +611,7 @@ Por ejemplo para cambiar el mail para el repositorio: `git config --local user.m
 
 Este tipo de configuraciones es importante tenerlas encuentra para cuando vamos a usar repositorios públicos, ya que si uno desea que la información personal de las direcciones email o de nuestro nombre completo, es la única opción configurar para estos repositorios en particular usuarios y mail que no sean nuestros principales. En el caso de usar github, este servicio nos provee de direcciones email que no revelan nuestros datos.
 
-Por ejemplo al realizar un `git log` veremos los datos que tenemos configurados, en mi caso en `global`, si yo quisiera publicar este repositorio y que mis datos no queden publicos lo que debo hacer es configurar el repositorio de manera `local` indicando unos datos que resguarden mi privacidad.
+Por ejemplo al realizar un `git log` veremos los datos que tenemos configurados, en mi caso en `global`, si yo quisiera publicar este repositorio y que mis datos no queden públicos lo que debo hacer es configurar el repositorio de manera `local` indicando unos datos que resguarden mi privacidad.
 
 ```bash
 rodri@laptop-agus MINGW64 /c/rep/miapp (main)
@@ -626,16 +626,15 @@ commit f151eed0b24765921f8c20b754cf3c95112b7c96
 Author: agustin1996ra <rodriguezalvarezagustin@gmail.com>
 Date:   Thu Jul 20 18:52:56 2023 -0300
 
-    primera confirmacion
+    primera confirmación
 ```
 
 ### Otra forma de iniciar un repositorio
 
-Podemos crear un repositorio también con el siguiente comando `git init --bare aplicacion`, en el cual indicamos el nombre de la carpeta de repositorio al final. Este comando lo que quiere decir es que crearemos un repositorio en un lugar, pero trabajaremos en otro lado. Osea el registro de cambios se guardara en otro lugar de donde tenemos nuestros archivos. PAra usar este repositorio una vez creado tengo que usar un `git clone` y la dirección de el repositorio "remoto".
+Podemos crear un repositorio también con el siguiente comando `git init --bare aplicación`, en el cual indicamos el nombre de la carpeta de repositorio al final. Este comando lo que quiere decir es que crearemos un repositorio en un lugar, pero trabajaremos en otro lado. Osea el registro de cambios se guardara en otro lugar de donde tenemos nuestros archivos. PAra usar este repositorio una vez creado tengo que usar un `git clone` y la dirección de el repositorio "remoto".
 
 ## Git Sesión 4
 
 - `git bisect`: Este comando se utiliza empezando con un `git bisect start`, luego se le pasa el ultimo commit "bueno" donde nuestro proyecto funcionaba con el comando `git bisect good <hash>`. Y después le pasaremos el hash del commit donde dejo de funcionar con el comando `git bisect bad <hash>`.
 
 - `git blame <ruta archivo>` nos permite ver que usuarios y cuando alteraron un archivo
-
